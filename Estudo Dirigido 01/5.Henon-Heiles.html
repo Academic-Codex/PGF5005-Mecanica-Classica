@@ -7561,29 +7561,13 @@ $$\dot{p_2} = -\frac{\partial H}{\partial q_2} = -(q_2 + q_1^2 - q_2^2)$$</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=2bbdb003">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="5.2.-Implementa%C3%A7%C3%A3o-da-constru%C3%A7%C3%A3o-da-se%C3%A7%C3%A3o-de-Poincar%C3%A9">5.2. Implementação da construção da seção de Poincaré<a class="anchor-link" href="#5.2.-Implementa%C3%A7%C3%A3o-da-constru%C3%A7%C3%A3o-da-se%C3%A7%C3%A3o-de-Poincar%C3%A9">¶</a></h3><p>Esta célula contém a lógica principal para a simulação. A função <code>get_poincare_points</code> implementa o integrador de Euler Simplético e o algoritmo de Hénon para detectar e registrar os pontos da seção de Poincaré.</p>
-<p>A seção de Poincaré será construída no plano $(q_2, p_2)$ para a superfície de seção $q_1=0$, com a condição adicional de $p_1 \ge 0$.</p>
-<p>O algoritmo de Hénon envolve um segundo passo de integração para encontrar o ponto exato de interseção com a superfície de seção.
-Para isso, reformulamos as equações de movimento, usando $q_1$ como a variável independente:</p>
-<p>$$\frac{dq_2}{dq_1} = \frac{\dot{q_2}}{\dot{q_1}} = \frac{p_2}{p_1}$$
-$$\frac{dp_2}{dq_1} = \frac{\dot{p_2}}{\dot{q_1}} = \frac{-(q_2 + q_1^2 - q_2^2)}{p_1}$$</p>
-</div>
-</div>
-</div>
-</div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b3330f2f">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="5.2.-Implementa%C3%A7%C3%A3o-do-m%C3%A9todo-de-Euler-simpl%C3%A9tico">5.2. Implementação do método de Euler simplético<a class="anchor-link" href="#5.2.-Implementa%C3%A7%C3%A3o-do-m%C3%A9todo-de-Euler-simpl%C3%A9tico">¶</a></h3><p>O método de Euler Simplético para esta Hamiltoniana separável é um mapa que atualiza as posições e momentos em duas etapas:</p>
+<h3 id="5.2.-Implementa%C3%A7%C3%A3o-do-m%C3%A9todo-de-Euler-simpl%C3%A9tico-e-algoritmo-de-Henon">5.2. Implementação do método de Euler simplético e algoritmo de Henon<a class="anchor-link" href="#5.2.-Implementa%C3%A7%C3%A3o-do-m%C3%A9todo-de-Euler-simpl%C3%A9tico-e-algoritmo-de-Henon">¶</a></h3><h4 id="M%C3%A9todo-de-Euler">Método de Euler<a class="anchor-link" href="#M%C3%A9todo-de-Euler">¶</a></h4><p>O método de Euler Simplético para esta Hamiltoniana separável é um mapa que atualiza as posições e momentos em duas etapas:</p>
 <ol>
 <li><p><strong>Atualização das Posições:</strong>
 $$q_1^{(n+1)}=q_1^{(n)}+\Delta t p_1^{(n)}$$
@@ -7602,7 +7586,7 @@ $$p_2^{(n+1)}=p_2^{(n)}-\Delta t (q_2^{(n+1)} + (q_1^{(n+1)})^2 - (q_2^{(n+1)})^
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [35]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">euler_symplectic_step</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
@@ -7623,12 +7607,82 @@ $$p_2^{(n+1)}=p_2^{(n)}-\Delta t (q_2^{(n+1)} + (q_1^{(n+1)})^2 - (q_2^{(n+1)})^
 </div>
 </div>
 </div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b2fb2f23">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h4 id="Algoritmo-de-Henon">Algoritmo de Henon<a class="anchor-link" href="#Algoritmo-de-Henon">¶</a></h4><p>O algoritmo de Henon encontra o ponto exato onde a trajetória cruza a seção
+de Poincaré $q_1 = 0$. O algoritmo de Hénon envolve um segundo passo de integração para encontrar o ponto exato de interseção com a superfície de seção.
+Para isso, reformulamos as equações de movimento, usando $q_1$ como a variável independente:</p>
+<p>$$\frac{dq_2}{dq_1} = \frac{\dot{q_2}}{\dot{q_1}} = \frac{p_2}{p_1}$$
+$$\frac{dp_2}{dq_1} = \frac{\dot{p_2}}{\dot{q_1}} = \frac{-(q_2 + q_1^2 - q_2^2)}{p_1}$$</p>
+<ol>
+<li><p><strong>Verifica o cruzamento</strong><br/>
+Checa se $q_1$ mudou de sinal (foi de negativo para positivo) e se $p_1 \ge 0$.
+Isso garante que a trajetória realmente passou pela seção na direção certa.</p>
+</li>
+<li><p><strong>Calcula o quanto falta em $q_1$</strong><br/>
+A distância até a seção é simplesmente<br/>
+$$
+\Delta q_1 = -q_1^{(n)} .
+$$</p>
+</li>
+<li><p><strong>Avança as outras variáveis em função de $q_1$</strong>
+Em vez de usar o tempo $t$, o algoritmo usa $q_1$ como “passo”.</p>
+</li>
+<li><p><strong>Retorna o ponto de interseção</strong></p>
+</li>
+<li><p>O par $(q_2^{*}, p_2^{*})$ é o ponto preciso na seção $q_1 = 0$.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=f6d2c765">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [41]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">henon_alg</span><span class="p">(</span><span class="n">q1_old</span><span class="p">,</span> <span class="n">q2_old</span><span class="p">,</span> <span class="n">p1_old</span><span class="p">,</span> <span class="n">p2_old</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">p1</span><span class="p">):</span>
+    <span class="c1"># Condição de cruzamento</span>
+    <span class="k">if</span> <span class="n">q1_old</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">q1</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">p1</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># Δq1 necessário para alcançar q1=0</span>
+        <span class="n">d_q1</span> <span class="o">=</span> <span class="o">-</span><span class="n">q1_old</span>
+
+        <span class="c1"># Euler em função de q1</span>
+        <span class="n">q2_intersec</span> <span class="o">=</span> <span class="n">q2_old</span> <span class="o">+</span> <span class="n">d_q1</span> <span class="o">*</span> <span class="p">(</span><span class="n">p2_old</span> <span class="o">/</span> <span class="n">p1_old</span><span class="p">)</span>
+        <span class="n">p2_intersec</span> <span class="o">=</span> <span class="n">p2_old</span> <span class="o">+</span> <span class="n">d_q1</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">q2_old</span> <span class="o">+</span> <span class="n">q1_old</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">q2_old</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">p1_old</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">q2_intersec</span><span class="p">,</span> <span class="n">p2_intersec</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=2bbdb003">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="5.2.-Implementa%C3%A7%C3%A3o-da-constru%C3%A7%C3%A3o-da-se%C3%A7%C3%A3o-de-Poincar%C3%A9">5.2. Implementação da construção da seção de Poincaré<a class="anchor-link" href="#5.2.-Implementa%C3%A7%C3%A3o-da-constru%C3%A7%C3%A3o-da-se%C3%A7%C3%A3o-de-Poincar%C3%A9">¶</a></h3><p>Esta célula contém a lógica principal para a simulação. A função <code>get_poincare_points</code> implementa o integrador de Euler Simplético e o algoritmo de Hénon para detectar e registrar os pontos da seção de Poincaré.</p>
+<p>A seção de Poincaré será construída no plano $(q_2, p_2)$ para a superfície de seção $q_1=0$, com a condição adicional de $p_1 \ge 0$.</p>
+</div>
+</div>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=60f1b181">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [42]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_poincare_points</span><span class="p">(</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">E_target</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">num_steps</span><span class="p">):</span>
@@ -7646,18 +7700,8 @@ $$p_2^{(n+1)}=p_2^{(n)}-\Delta t (q_2^{(n+1)} + (q_1^{(n+1)})^2 - (q_2^{(n+1)})^
         <span class="c1"># Passo de integração principal</span>
         <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">euler_symplectic_step</span><span class="p">(</span><span class="n">q1_old</span><span class="p">,</span> <span class="n">q2_old</span><span class="p">,</span> <span class="n">p1_old</span><span class="p">,</span> <span class="n">p2_old</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
         
-        <span class="c1"># Verifica a condição de cruzamento (passagem de q1=0)</span>
-        <span class="c1"># e a condição p1 &gt;= 0</span>
-        <span class="k">if</span> <span class="n">q1_old</span> <span class="o">*</span> <span class="n">q1</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">p1</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="c1"># Algoritmo de Hénon para encontrar o ponto exato</span>
-            <span class="n">d_q1</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">-</span> <span class="n">q1_old</span>
-            
-            <span class="c1"># Use um passo de Euler para encontrar o ponto de interseção</span>
-            <span class="n">q2_intersec</span> <span class="o">=</span> <span class="n">q2_old</span> <span class="o">+</span> <span class="n">d_q1</span> <span class="o">*</span> <span class="p">(</span><span class="n">p2_old</span> <span class="o">/</span> <span class="n">p1_old</span><span class="p">)</span>
-            <span class="n">p2_intersec</span> <span class="o">=</span> <span class="n">p2_old</span> <span class="o">+</span> <span class="n">d_q1</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">q2_old</span> <span class="o">+</span> <span class="n">q1_old</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">q2_old</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">p1_old</span><span class="p">)</span>
-            
-            <span class="n">poincare_points_q2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">q2_intersec</span><span class="p">)</span>
-            <span class="n">poincare_points_p2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p2_intersec</span><span class="p">)</span>
+        <span class="c1"># Verifica a condição de cruzamento</span>
+        <span class="n">q2_intersec</span><span class="p">,</span> <span class="n">p2_intersec</span> <span class="o">=</span> <span class="n">henon_alg</span><span class="p">(</span><span class="n">q1_old</span><span class="p">,</span> <span class="n">q2_old</span><span class="p">,</span> <span class="n">p1_old</span><span class="p">,</span> <span class="n">p2_old</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">p1</span><span class="p">)</span>
             
     <span class="k">return</span> <span class="n">poincare_points_q2</span><span class="p">,</span> <span class="n">poincare_points_p2</span>
 </pre></div>
@@ -7684,12 +7728,12 @@ $p_2^2 = 0.12666 \implies p_2 \approx \pm 0.35589$</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=2ca6267f">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=2ca6267f">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [43]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Parâmetros da simulação</span>
@@ -7754,6 +7798,42 @@ $p_2^2 = 0.12666 \implies p_2 \approx \pm 0.35589$</p>
 
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Concluído para E = </span><span class="si">{</span><span class="n">E_target</span><span class="si">}</span><span class="s2">! Total de pontos: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">all_q2_points</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Iniciando simulações para E = 0.08333...
+  &gt; E = 0.08333: Trajetória 134/900...
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">TypeError</span>                                 Traceback (most recent call last)
+<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[43]</span><span class="ansi-green-fg">, line 36</span>
+<span class="ansi-green-fg">     33</span> initial_state = (<span class="ansi-green-fg">0.0</span>, q2_0, p1_calc, p2_0)
+<span class="ansi-green-fg">     35</span> <span style="color: rgb(0,135,0)">print</span>(<span class="ansi-yellow-fg">f</span><span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">  &gt; E = </span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>E_target<span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span class="ansi-yellow-fg">: Trajetória </span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>trajectory_counter<span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span class="ansi-yellow-fg">/</span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>total_trajectories<span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span class="ansi-yellow-fg">...</span><span class="ansi-yellow-fg">"</span>)
+<span class="ansi-green-fg">---&gt; </span><span class="ansi-green-fg">36</span> q2_points, p2_points = <span class="ansi-yellow-bg">get_poincare_points</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">initial_state</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">E_target</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">dt</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">num_steps</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg">     38</span> all_q2_points.extend(q2_points)
+<span class="ansi-green-fg">     39</span> all_p2_points.extend(p2_points)
+
+<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[42]</span><span class="ansi-green-fg">, line 17</span>, in <span class="ansi-cyan-fg">get_poincare_points</span><span class="ansi-blue-fg">(initial_state, E_target, dt, num_steps)</span>
+<span class="ansi-green-fg">     14</span>     q1, q2, p1, p2 = euler_symplectic_step(q1_old, q2_old, p1_old, p2_old, dt)
+<span class="ansi-green-fg">     16</span>     <span style="color: rgb(95,135,135)"># Verifica a condição de cruzamento</span>
+<span class="ansi-green-fg">---&gt; </span><span class="ansi-green-fg">17</span>     q2_intersec, p2_intersec = henon_alg(q1_old, q2_old, p1_old, p2_old, q1, p1)
+<span class="ansi-green-fg">     19</span> <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> poincare_points_q2, poincare_points_p2
+
+<span class="ansi-red-fg">TypeError</span>: cannot unpack non-iterable NoneType object</pre>
 </div>
 </div>
 </div>
