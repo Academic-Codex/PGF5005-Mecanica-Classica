@@ -159,6 +159,7 @@ def build_static_site(src: Path, out: Path, template_dir: Path, title: str, exec
 
     # assets
     copy_tree(template_dir / "css", out / "css")
+    copy_tree(template_dir / "assets", out / "assets")
     copy_tree(template_dir / "js", out / "js")
 
     return nb_count
