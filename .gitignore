@@ -54,3 +54,6 @@ pip-log.txt
 *.bak
 *.old
 *.orig
+
+# Folder
+.backup
