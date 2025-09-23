@@ -106,6 +106,7 @@ def collect_tree(src: Path, out: Path, execute: bool):
 
         cmd = [
             sys.executable, "-m", "nbconvert", "--to", "html",
+            "--HTMLExporter.embed_images=True", 
             "--output", out_html.name, "--output-dir", str(out_html.parent), str(path)
         ]
         if execute:
