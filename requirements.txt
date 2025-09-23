@@ -2,3 +2,5 @@ matplotlib
 ipykernel
 dask
 dask-jobqueue
+nbconvert
+Pillow
