@@ -8285,6 +8285,60 @@ Analisando modo de Rotação com Euler Simplético...
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h4 id="Mapa-(4)-%E2%80%94-M%C3%A9todo-de-Euler-Expl%C3%ADcito">Mapa (4) — Método de Euler Explícito<a class="anchor-link" href="#Mapa-(4)-%E2%80%94-M%C3%A9todo-de-Euler-Expl%C3%ADcito">¶</a></h4><p>$$
+\begin{cases}
+q_{n+1} = q_n + \Delta t \, \dfrac{\partial H}{\partial p}(q_n, p_n) \\[6pt]
+p_{n+1} = p_n - \Delta t \, \dfrac{\partial H}{\partial q}(q_n, p_n)
+\end{cases}
+$$</p>
+<p>Jacobiano:</p>
+<p>$$
+J^{(4)} = 
+\begin{bmatrix}
+\dfrac{\partial q_{n+1}}{\partial q_n} &amp; \dfrac{\partial q_{n+1}}{\partial p_n} \\[6pt]
+\dfrac{\partial p_{n+1}}{\partial q_n} &amp; \dfrac{\partial p_{n+1}}{\partial p_n}
+\end{bmatrix}
+$$</p>
+<p>Determinante:</p>
+<p>$$
+\det(J^{(4)}) = 1 + \Delta t^2 \, 
+\dfrac{\partial^2 H}{\partial q^2}(q_n,p_n)\;
+\dfrac{\partial^2 H}{\partial p^2}(q_n,p_n)
+$$</p>
+<hr/>
+<h4 id="Mapa-(9)-%E2%80%94-Euler-Simples-(Variante-Impl%C3%ADcita)">Mapa (9) — Euler Simples (Variante Implícita)<a class="anchor-link" href="#Mapa-(9)-%E2%80%94-Euler-Simples-(Variante-Impl%C3%ADcita)">¶</a></h4><p>$$
+\begin{cases}
+q_{n+1} = q_n + \Delta t \, \dfrac{\partial H}{\partial p}(q_n, p_{n+1}) \\[6pt]
+p_{n+1} = p_n - \Delta t \, \dfrac{\partial H}{\partial q}(q_n, p_{n+1})
+\end{cases}
+$$</p>
+<p>Jacobiano:</p>
+<p>$$
+J^{(9)} = 
+\begin{bmatrix}
+\dfrac{\partial q_{n+1}}{\partial q_n} &amp; \dfrac{\partial q_{n+1}}{\partial p_n} \\[6pt]
+\dfrac{\partial p_{n+1}}{\partial q_n} &amp; \dfrac{\partial p_{n+1}}{\partial p_n}
+\end{bmatrix}
+$$</p>
+<p>Determinante:</p>
+<p>$$
+\det(J^{(9)}) = 1
+$$</p>
+<hr/>
+<h3 id="Conclus%C3%A3o">Conclusão<a class="anchor-link" href="#Conclus%C3%A3o">¶</a></h3><ul>
+<li>Para o <strong>mapa (4)</strong> o determinante não é, em geral, igual a 1. Logo, <strong>não é simplético</strong>.</li>
+<li>Para o <strong>mapa (9)</strong> o determinante é exatamente 1, o que evidencia o fato de que o método <strong>é simplético</strong>.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=39ed2d49">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 </div>
 </div>
 </div>
