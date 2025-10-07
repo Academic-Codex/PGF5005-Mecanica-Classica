@@ -89,79 +89,102 @@
   render();
 
 
-  // === Avatar protegido: decrypt & render com logs ===
+  /*************** DEBUG INICIAL DO APP ***************/
+  console.log('[avatar] app.js carregado', new Date().toISOString(), 'readyState=', document.readyState);
+
+  // Loga erros globais para pegar qualquer exceção que impeça o restante de rodar
+  window.addEventListener('error', (e) => {
+    console.error('[avatar] window.onerror:', e.message, 'em', e.filename + ':' + e.lineno + ':' + e.colno);
+  });
+  window.addEventListener('unhandledrejection', (e) => {
+    console.error('[avatar] unhandledrejection:', e.reason);
+  });
+
+  /*************** LOADER DO AVATAR PROTEGIDO ***************/
   (() => {
     'use strict';
 
     // ——— CONFIG ———
     const ENC_URL = 'https://academic-codex.github.io/PGF5005-Mecanica-Classica/assets/img/profile.enc.json';
-    // obf = Base64 do HEX invertido (outra ofuscação? ajuste aqui)
+    // OBF = Base64 do HEX invertido (como combinamos)
     const OBF = 'YWE5YjQ4ODQ1MTkyNDJiZjQzYTE5Y2Y3NzZlNWE3NGEyYjVkNDI4MjllNDU4MjA0ZTc2MTFlNDIzYmYwZjc2Ng==';
 
-    // ——— helpers ———
+    // ——— HELPERS ———
     const log = (...a) => console.log('[avatar]', ...a);
     const errlog = (...a) => console.error('[avatar]', ...a);
-
-    function safeAtob(s) {
-      s = (s || '').toString().trim().replace(/[\r\n\s]/g, '').replace(/-/g, '+').replace(/_/g, '/');
-      while (s.length % 4) s += '=';
-      return atob(s);
-    }
-    const b64ToU8 = b64 => Uint8Array.from(atob(b64), c => c.charCodeAt(0));
-    function hexToBytes(hex) { const m = (hex || '').match(/.{1,2}/g) || []; return new Uint8Array(m.map(h => parseInt(h, 16))); }
+    function safeAtob(s) { s = (s || '').toString().trim().replace(/[\r\n\s]/g, '').replace(/-/g, '+').replace(/_/g, '/'); while (s.length % 4) s += '='; return atob(s); }
+    const b64ToU8 = (b64) => Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+    const hexToBytes = (hex) => new Uint8Array((hex.match(/.{1,2}/g) || []).map(h => parseInt(h, 16)));
 
     async function loadProtectedAvatar() {
-      try {
-        const img = document.getElementById('avatar') || document.querySelector('img.avatar');
-        if (!img) { log('sem #avatar nesta página — saindo'); return; }
+      log('handler iniciou. readyState=', document.readyState);
 
-        // Reconstrói a chave a partir do OBF (Base64 do HEX invertido)
+      // 1) Garantir que o <img> existe
+      const img = document.getElementById('avatar') || document.querySelector('img.avatar');
+      if (!img) { errlog('NÃO ENCONTREI <img id="avatar"> nesta página. Abortando.'); return; }
+      log('encontrei <img id="avatar">');
+
+      try {
+        // 2) Reconstruir chave
         const keyHex = safeAtob(OBF).split('').reverse().join('');
+        log('keyHex len=', keyHex.length, 'head=', keyHex.slice(0, 6), 'tail=', keyHex.slice(-6));
         const keyBytes = hexToBytes(keyHex);
-        log('keyHex len=', keyHex.length, 'keyBytes len=', keyBytes.length);
+        log('keyBytes len=', keyBytes.length);
         if (keyBytes.length !== 32) throw new Error('key length != 32 bytes');
 
-        // Baixa o JSON cifrado
-        log('fetch:', ENC_URL);
+        // 3) Buscar JSON cifrado
+        log('fetch', ENC_URL);
         const resp = await fetch(ENC_URL, { cache: 'no-store' });
-        log('status:', resp.status);
-        if (!resp.ok) throw new Error(`fetch failed: ${resp.status} ${resp.statusText}`);
-        const payload = await resp.json();
-        log('payload keys:', Object.keys(payload));
+        log('status', resp.status, resp.statusText);
+        if (!resp.ok) throw new Error(`fetch falhou: ${resp.status} ${resp.statusText}`);
+        const payload = await resp.json().catch(async e => {
+          const raw = await resp.text().catch(() => '<sem corpo>');
+          errlog('falha parse JSON; amostra:', raw.slice(0, 200));
+          throw e;
+        });
+        log('payload OK. keys=', Object.keys(payload));
 
+        // 4) Converter campos
         const iv = b64ToU8(payload.iv);
         const tag = b64ToU8(payload.tag);
         const ct = b64ToU8(payload.ciphertext);
         log('lens iv/tag/ct:', iv.length, tag.length, ct.length);
 
-        // ct + tag
+        // 5) Montar combo ct+tag
         const combo = new Uint8Array(ct.length + tag.length);
         combo.set(ct, 0); combo.set(tag, ct.length);
 
-        // Importa chave e decripta
+        // 6) Decriptar
         const cryptoKey = await crypto.subtle.importKey('raw', keyBytes, 'AES-GCM', false, ['decrypt']);
-        const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, cryptoKey, combo);
-        log('decrypt OK, bytes:', plain.byteLength);
+        log('importKey OK');
+        const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, cryptoKey, combo.buffer);
+        log('decrypt OK; bytes=', plain.byteLength);
 
-        // Blob -> URL -> <img>
+        // 7) Blob -> URL -> <img>
         const blob = new Blob([plain], { type: payload.mime || 'image/jpeg' });
         const url = URL.createObjectURL(blob);
-        img.onload = () => log('img carregada ✓');
-        img.onerror = e => errlog('img error', e);
+        img.onload = () => log('img onload ✓');
+        img.onerror = (e) => errlog('img onerror', e);
         img.src = url;
-        log('src definido');
+        log('src definido →', url.slice(0, 60) + '…');
+
       } catch (e) {
-        errlog('FALHA:', e);
+        errlog('FALHA NO HANDLER:', e);
       }
     }
 
-    // expõe para você poder chamar manualmente no console
+    // Expor p/ você poder acionar manualmente
     window.loadProtectedAvatar = loadProtectedAvatar;
 
-    // garante que rode depois do DOM
+    // 8) Garantir execução após DOM
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', loadProtectedAvatar, { once: true });
+      log('aguardando DOMContentLoaded…');
+      document.addEventListener('DOMContentLoaded', () => {
+        log('DOMContentLoaded disparado');
+        loadProtectedAvatar();
+      }, { once: true });
     } else {
+      log('DOM já pronto; executando handler agora');
       loadProtectedAvatar();
     }
   })();
