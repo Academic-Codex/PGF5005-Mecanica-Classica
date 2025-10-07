@@ -2,13 +2,11 @@
 
   const data = window.TREE_DATA;
 
-  /* ---------------- TREE (só roda se existir TREE_DATA) ---------------- */
   if (data) {
     const elTree = document.getElementById('tree');
     const q = document.getElementById('q');
     const viewer = document.getElementById('viewer');
 
-    // ——— util: abre todos os ancestrais de um elemento
     function openAncestors(el) {
       let cur = el.parentElement;
       while (cur && cur !== elTree) {
@@ -75,10 +73,8 @@
       const filtered = cloneFiltered(data);
       if (!filtered) { elTree.innerHTML = '<li class="node">Nothing found…</li>'; return; }
 
-      // cria nós JÁ abertos
       (filtered.children || []).forEach(ch => elTree.appendChild(mkNode(ch, { initialOpen: true })));
 
-      // se há filtro, garanta ancestrais abertos dos matches visíveis
       if (filter) {
         elTree.querySelectorAll('.node.file .label, .node.dir .label').forEach(lbl => {
           const txt = lbl.textContent || '';
@@ -87,35 +83,20 @@
       }
     }
 
-    if (elTree && q) {          // garante que os elementos existem nesta página
+    if (elTree && q) {
       q.addEventListener('input', (e) => render(e.target.value.trim().toLowerCase()));
       render();
     }
   }
 
 
-
-  /*************** DEBUG INICIAL DO APP ***************/
-  console.log('[avatar] app.js carregado', new Date().toISOString(), 'readyState=', document.readyState);
-
-  // Loga erros globais para pegar qualquer exceção que impeça o restante de rodar
-  window.addEventListener('error', (e) => {
-    console.error('[avatar] window.onerror:', e.message, 'em', e.filename + ':' + e.lineno + ':' + e.colno);
-  });
-  window.addEventListener('unhandledrejection', (e) => {
-    console.error('[avatar] unhandledrejection:', e.reason);
-  });
-
-  /*************** LOADER DO AVATAR PROTEGIDO ***************/
   (() => {
     'use strict';
 
-    // ——— CONFIG ———
-    const ENC_URL = 'https://academic-codex.github.io/PGF5005-Mecanica-Classica/assets/img/profile.enc.json';
-    // OBF = Base64 do HEX invertido (como combinamos)
+    const ENC_URL = './assets/img/profile.enc.json';
+
     const OBF = 'YWE5YjQ4ODQ1MTkyNDJiZjQzYTE5Y2Y3NzZlNWE3NGEyYjVkNDI4MjllNDU4MjA0ZTc2MTFlNDIzYmYwZjc2Ng==';
 
-    // ——— HELPERS ———
     const log = (...a) => console.log('[avatar]', ...a);
     const errlog = (...a) => console.error('[avatar]', ...a);
     function safeAtob(s) { s = (s || '').toString().trim().replace(/[\r\n\s]/g, '').replace(/-/g, '+').replace(/_/g, '/'); while (s.length % 4) s += '='; return atob(s); }
@@ -131,14 +112,11 @@
       log('encontrei <img id="avatar">');
 
       try {
-        // 2) Reconstruir chave
         const keyHex = safeAtob(OBF).split('').reverse().join('');
-        log('keyHex len=', keyHex.length, 'head=', keyHex.slice(0, 6), 'tail=', keyHex.slice(-6));
         const keyBytes = hexToBytes(keyHex);
         log('keyBytes len=', keyBytes.length);
         if (keyBytes.length !== 32) throw new Error('key length != 32 bytes');
 
-        // 3) Buscar JSON cifrado
         log('fetch', ENC_URL);
         const resp = await fetch(ENC_URL, { cache: 'no-store' });
         log('status', resp.status, resp.statusText);
@@ -150,23 +128,19 @@
         });
         log('payload OK. keys=', Object.keys(payload));
 
-        // 4) Converter campos
         const iv = b64ToU8(payload.iv);
         const tag = b64ToU8(payload.tag);
         const ct = b64ToU8(payload.ciphertext);
         log('lens iv/tag/ct:', iv.length, tag.length, ct.length);
 
-        // 5) Montar combo ct+tag
         const combo = new Uint8Array(ct.length + tag.length);
         combo.set(ct, 0); combo.set(tag, ct.length);
 
-        // 6) Decriptar
         const cryptoKey = await crypto.subtle.importKey('raw', keyBytes, 'AES-GCM', false, ['decrypt']);
         log('importKey OK');
         const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, cryptoKey, combo.buffer);
         log('decrypt OK; bytes=', plain.byteLength);
 
-        // 7) Blob -> URL -> <img>
         const blob = new Blob([plain], { type: payload.mime || 'image/jpeg' });
         const url = URL.createObjectURL(blob);
         img.onload = () => log('img onload ✓');
@@ -179,10 +153,8 @@
       }
     }
 
-    // Expor p/ você poder acionar manualmente
     window.loadProtectedAvatar = loadProtectedAvatar;
 
-    // 8) Garantir execução após DOM
     if (document.readyState === 'loading') {
       log('aguardando DOMContentLoaded…');
       document.addEventListener('DOMContentLoaded', () => {
