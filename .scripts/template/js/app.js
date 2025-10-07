@@ -87,4 +87,38 @@
 
   q.addEventListener('input', (e) => render(e.target.value.trim().toLowerCase()));
   render();
+
+
+  (async () => {
+  // 1) URL do ciphertext no repo
+  const encUrl = './assets/foto.enc.json';
+
+  // 2) Chave ofuscada: base64 da chave hex invertida (exemplo)
+  //    Exemplo de ofuscação: chaveHex = reverse(atob('BASE64_OF_HEX'))
+  const obf = 'c2Vtb25vX2Jhc2U2NF9leGFtcGxl'; // << troque pela sua ofuscação real
+  const keyHex = atob(obf).split('').reverse().join(''); // desfaz ofuscação
+
+  // converte hex -> Uint8Array
+  const keyBytes = new Uint8Array(keyHex.match(/.{2}/g).map(h => parseInt(h,16)));
+
+  const b64ToBuf = b64 => Uint8Array.from(atob(b64), c=>c.charCodeAt(0)).buffer;
+  const resp = await fetch(encUrl);
+  const payload = await resp.json();
+
+  const iv = await b64ToBuf(payload.iv);
+  const tag = await b64ToBuf(payload.tag);
+  const ct = await b64ToBuf(payload.ciphertext);
+
+  const ctU8 = new Uint8Array(ct);
+  const tagU8 = new Uint8Array(tag);
+  const combo = new Uint8Array(ctU8.length + tagU8.length);
+  combo.set(ctU8,0); combo.set(tagU8, ctU8.length);
+
+  const key = await crypto.subtle.importKey('raw', keyBytes, 'AES-GCM', false, ['decrypt']);
+  const plain = await crypto.subtle.decrypt({ name:'AES-GCM', iv:new Uint8Array(iv) }, key, combo.buffer);
+
+  const blob = new Blob([plain], { type: payload.mime || 'image/jpeg' });
+  document.getElementById('img').src = URL.createObjectURL(blob);
+})();
+
 })();
