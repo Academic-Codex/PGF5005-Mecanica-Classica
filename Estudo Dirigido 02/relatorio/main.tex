@@ -1,0 +1,124 @@
+\documentclass[a4paper]{article}
+\usepackage{student}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage[version=4]{mhchem}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, decorations.pathreplacing}
+\usepackage{enumitem}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\pagestyle{plain}
+
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+% Definindo o estilo de destaque com linhas pontilhadas
+\tikzstyle{highlight} = [draw, dashed, thick, rectangle, rounded corners, inner sep=0.2cm, orange]
+
+
+\tikzstyle{startstop} = [
+    rectangle, rounded corners, minimum width=0.5cm,
+    text centered, draw=black, fill=blue!10, font=\small
+]
+\tikzstyle{startstop_S} = [
+    rectangle, rounded corners, minimum width=0.5cm, minimum height=0.8cm,
+    text centered, draw=black, fill=green!30, font=\small
+]
+\tikzstyle{decision} = [
+    diamond, aspect=2, draw=black, fill=orange!15, align=center,
+    text centered, inner sep=0pt, font=\small
+]
+\tikzstyle{decision_S} = [
+    diamond, aspect=2, draw=black, fill=orange!30, align=center,
+    text centered, inner sep=0pt, font=\small
+]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+
+
+% Metadata
+\date{\today}
+\setmodule{PGF5005/IFUSP: Mecânica Clássica I. \\ Prof.: Matheus Jean Lazarotto} 
+\setterm{2o. semestre, 2025}
+
+%-------------------------------%
+% Other details
+% TODO: Fill these
+%-------------------------------%
+\title{Estudo Dirigido 02 - 08/10}
+\setmembername{Nara Avila Moraes}  % Fill group member names
+\setmemberuid{5716734}  % Fill group member uids (same order)
+
+%-------------------------------%
+% Add / Delete commands and packages
+% TODO: Add / Delete here as you need
+%-------------------------------%
+\usepackage{amsmath,amssymb,bm}
+
+\newcommand{\KL}{\mathrm{KL}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\T}{\top}
+
+\newcommand{\expdist}[2]{%
+        \normalfont{\textsc{Exp}}(#1, #2)%
+    }
+\newcommand{\expparam}{\bm \lambda}
+\newcommand{\Expparam}{\bm \Lambda}
+\newcommand{\natparam}{\bm \eta}
+\newcommand{\Natparam}{\bm H}
+\newcommand{\sufstat}{\bm u}
+
+% Main document
+\begin{document}
+    % Add header
+    \header{}
+
+\textbf{Questão 02 - Hamiltoniana de Walker-Ford}
+\begin{center}
+\begin{itemize}
+    \item[(2.3)] Realize a implementação computacional das equações obtidas no exercício anterior. Em seu programa, de maneira complementar ao método de Euler simplético, realize também a implementação do método de Newton, uma vez que a resolução de sistemas algébricos não-lineares será necessária para a integração de Newton em cada passo de tempo. Confirme numericamente as integrais. Além disso, aplique o método de Newton com condição a resolver iterativamente os sistemas algébricos lineares. Portanto, a Hamiltoniana H será programada e a Hamiltoniana de despotenciação \( H_J = J_1 J_2 \cos (2 \phi_1 - 2 \phi_2) + \beta J_1 J_2^2 \cos (2 \phi_1 - 3 \phi_2) \) também será utilizada para construção de seções de Poincaré. Descreva o resultado obtido e anexe o código do programa desenvolvido ao seu trabalho.
+    \begin{answer}[Ítem 2.3]
+    \end{answer}
+    \item[(2.4)] Considere a seguinte transformação de variáveis:
+    \[
+        q_k = \sqrt{2J_k} \cos \phi_k, \quad
+        p_k = -\sqrt{2J_k} \sin \phi_k,
+    \]
+    na qual as quantidades \( q_k \) e \( p_k \), para \( k = 1,2 \), representam respectivamente variáveis canônicas de posição e momento.
+    \begin{answer}[Ítem 2.4]
+    \end{answer}
+    \item[(2.5)] Escolha uma trajetória utilizada para a construção da seção de Poincaré no exercício anterior e elabore gráficos para as funções \( H, F_1 \) e \( F_2 \) em função do tempo. Anexe a figura obtida ao seu trabalho. Comente os resultados.
+    \begin{answer}[Ítem 2.5]
+    \end{answer}
+    \item[(2.6)] Obtenha a seção de Poincaré no plano \( p_2 \times q_2 \) para \( q_1 = 0, p_1 \geq 0, \alpha = 0, \beta = 0,1 \) e \( E = 0,18 \). Indique os pontos fixos elípticos e hiperbólicos em seu gráfico. Anexe a figura obtida ao seu trabalho. O gráfico elaborado neste exercício é análogo à figura 7 do artigo de Walker e Ford.
+    \begin{answer}[Ítem 2.6]
+    \end{answer}
+    \item[(2.7)] Escolha uma trajetória utilizada para a construção da seção de Poincaré no exercício anterior e elabore gráficos para as funções \( H, F_1 \) e \( F_2 \) em função do tempo. Anexe a figura obtida ao seu trabalho. Comente os resultados.
+    \begin{answer}[Ítem 2.7]
+    \end{answer}
+    \item[(2.8)] Construa uma seção de Poincaré no plano \( p_2 \times q_2 \) para \( q_1 = 0, p_1 \geq 0, \alpha = 0, \beta = 0,1 \) e \( E = 0,0561 \). Anexe a figura obtida ao seu trabalho. Indique os termos de perturbação \( H_1 \) que produzem ressonâncias visíveis nesta seção de Poincaré. Identifique estas ressonâncias em sua figura. O gráfico elaborado neste exercício corresponde à figura 8 do artigo de Walker e Ford.
+    \begin{answer}[Ítem 2.8]
+    \end{answer}
+    \item[(2.9)] Obtenha a seção de Poincaré no plano \( p_2 \times q_2 \) para \( q_1 = 0, p_1 \geq 0, \alpha = 0, \beta = 0,02 \) e \( E = 0,18 \). Anexe a figura obtida ao seu trabalho. Indique em sua figura as ressonâncias secundárias visíveis nesta seção de Poincaré. Identifique estas ressonâncias em sua figura. O gráfico elaborado neste exercício corresponde à figura 9 do artigo de Walker e Ford.
+    \begin{answer}[Ítem 2.9]
+    \end{answer}
+    \item[(2.10)] Elabore uma seção de Poincaré no plano \( p_2 \times q_2 \) para \( q_1 = 0, p_1 \geq 0, \alpha = 0, \beta = 0,02 \) e \( E = 0,20 \). Anexe a figura obtida ao seu trabalho. Indique em sua figura as ressonâncias secundárias visíveis nesta seção de Poincaré. O gráfico obtido neste exercício corresponde à figura 12 do artigo de Walker e Ford.
+    \begin{answer}[Ítem 2.10]
+    \end{answer}
+    \item[(2.11)] Construa uma seção de Poincaré no plano \( p_2 \times q_2 \) para \( q_1 = 0, p_1 \geq 0, \alpha = 0, \beta = 0,02 \) e \( E = 0,2095 \). Anexe a figura obtida ao seu trabalho. O gráfico obtido neste exercício corresponde à figura 11 do artigo de Walker e Ford.
+    \begin{answer}[Ítem 2.11]
+    \end{answer}
+\end{itemize}
+\end{center}
+
+ \begin{minipage}[c]{0.84\textwidth}
+        \hspace{2em}%
+        [1] Os códigos deste estudo dirigido podem ser acessados em modo leitura em \url{http://academic-codex.github.io/PGF5005-Mecanica-Classica}.
+      \end{minipage}
+      \hfill
+      \begin{minipage}[c]{0.13\textwidth}
+    \centering
+            \includegraphics[width=0.7\linewidth]{figuras/image.png}
+      \end{minipage}
+\end{document}

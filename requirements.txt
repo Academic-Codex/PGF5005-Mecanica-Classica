@@ -4,3 +4,4 @@ dask
 dask-jobqueue
 nbconvert
 Pillow
+scipy

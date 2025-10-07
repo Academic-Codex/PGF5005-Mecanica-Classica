@@ -45,7 +45,7 @@
 % Other details
 % TODO: Fill these
 %-------------------------------%
-\title{Estudo Dirigido 01 - ??/09}
+\title{Estudo Dirigido 01 - 24/09}
 \setmembername{Nara Avila Moraes}  % Fill group member names
 \setmemberuid{5716734}  % Fill group member uids (same order)
 
@@ -78,67 +78,71 @@
 \begin{center}
 \begin{itemize}
     \item[(4.2)] Realize a implementação computacional do método de Euler convencional para resolver as equações de movimento do pêndulo simples. Anexe o código do programa desenvolvido ao seu trabalho.
-    \item[(4.3)]        
-    \item[(4.4)]
-    \item[(4.5)]
-    \item[(4.7)]    
-    \item[(4.8)]
-    \item[(4.9)]
-    \item[(4.10)]
-\end{itemize}
-\end{center}
 
-\textbf{Questão 05 - Hamiltoniana de Henon-Heiles}
-\begin{center}
-\begin{itemize}
-    \item[(5.2)]
-    \item[(5.3)]
-    \item[(5.4)]
-    \item[(5.5)]
-    \item[(5.6)]
-    \item[(5.7)]
-\end{itemize}
-\end{center}
-
-    \begin{answer}[Ítem 4.2]
+        \begin{answer}[Ítem 4.2]
     \end{answer}
 
-    \begin{answer}[Ítem 4.3]
+    \item[(4.3)] A partir do programa desenvolvido no exercício anterior, construa curvas de \( q(t) \times t \) e \( p(t) \times t \) considerando dois conjuntos de condições iniciais. Primeiramente, escolha uma condição inicial que resulte na libração do pêndulo. Em seguida, escolha uma condição inicial que resulte na rotação do pêndulo. Em cada caso, utilize três valores distintos para o passo de tempo, \( \Delta t = 10^{-1}, 10^{-2}, 10^{-3} \), colocando as três curvas em um mesmo gráfico. Anexe as figuras elaboradas ao seu trabalho. Comente os resultados, ou seja, avalie se as curvas obtidas são consistentes com o comportamento esperado para as variáveis \( q(t) \) e \( p(t) \) do pêndulo simples.
+
+        \begin{answer}[Ítem 4.3]
     \end{answer}
+
+    \item[(4.4)] Verifique numericamente o comportamento da energia total do pêndulo simples. Com este objetivo, construa os gráficos de \( E(t) \times t \) para as duas condições iniciais utilizadas no exercício anterior. Utilize novamente os três valores distintos para o passo de tempo, \( \Delta t = 10^{-1}, 10^{-2}, 10^{-3} \), colocando as três curvas obtidas em um mesmo gráfico. Anexe as figuras elaboradas ao seu trabalho. Comente os resultados, ou seja, avalie se as curvas obtidas são compatíveis com o comportamento esperado para a energia total do sistema.
+
 
     \begin{answer}[Ítem 4.4]
     \end{answer}
+    \item[(4.5)] Construa os gráficos de \( p(t) \times q(t) \) para as duas condições iniciais usadas nos exercícios anteriores. Em cada caso, utilize novamente os três valores distintos para o passo de tempo, \( \Delta t = 10^{-1}, 10^{-2}, 10^{-3} \), colocando todas as três curvas em um mesmo gráfico. Anexe as figuras elaboradas ao seu trabalho. Comente os resultados, ou seja, avalie se as trajetórias obtidas numericamente apresentam o comportamento esperado do pêndulo simples no espaço de fase.
 
-    \begin{answer}[Ítem 4.5]
+        \begin{answer}[Ítem 4.5]
     \end{answer}
-
+    \item[(4.7)] Realize a implementação computacional do método de Euler simplético para resolver as equações de movimento do pêndulo simples. Anexe o código do programa desenvolvido ao seu trabalho.
     \begin{answer}[Ítem 4.7]
     \end{answer}
-
+    \item[(4.8)] Utilizando o programa desenvolvido no exercício anterior, repita os procedimentos do exercício 4.3, ou seja, refaça os gráficos para \( q(t) \times t \) e \( p(t) \times t \), considerando novamente as mesmas condições iniciais de libração e rotação para os três tamanhos distintos de passo de tempo. Anexe as figuras elaboradas ao seu trabalho. Comente os resultados do método Euler simplético em comparação com as curvas correspondentes obtidas pelo método de Euler convencional.
     \begin{answer}[Ítem 4.8]
     \end{answer}
-
+    \item[(4.9)] Empregando novamente a implementação computacional do método de Euler simplético, repita os procedimentos do exercício 4.4, ou seja, reproduza os gráficos para \( E(t) \times t \), para as mesmas condições iniciais e passos de tempo. Anexe as figuras elaboradas ao seu trabalho. Comente os resultados em comparação com o método de Euler convencional.
     \begin{answer}[Ítem 4.9]
     \end{answer}
-
+    \item[(4.10)] Por fim, em analogia com o exercício 4.5, utilize a versão simplética do método de Euler para construir novamente os gráficos de \( p(t) \times q(t) \), considerando as mesmas condições iniciais e passos de tempo. Anexe as figuras elaboradas ao seu trabalho. Comente os resultados em comparação com o Euler convencional.
     \begin{answer}[Ítem 4.10]
     \end{answer}
+\end{itemize}
+\end{center}
 
+
+\textbf{Questão 05 - Hamiltoniana de Hénon-Heiles}
+\begin{center}
+\begin{itemize}
+    \item[(5.2)] Realize a implementação computacional do método de Euler simplético para a Hamiltoniana de Hénon-Heiles. O programa desenvolvido será utilizado nos próximos exercícios para a construção de seções de Poincaré no plano \( p_2 \times q_2 \), considerando \( q_1 = 0 \) e \( p_1 \ge 0 \). De maneira complementar ao método de Euler simplético, implemente também o algoritmo de Hénon para a construção de seções de Poincaré, conforme apresentado anteriormente neste estudo dirigido. Anexe o código do programa desenvolvido ao seu trabalho.
     \begin{answer}[Ítem 5.2]
     \end{answer}
-
+    \item[(5.3)] Construa uma seção de Poincaré para trajetórias com energia total \( E = 0.08333 \). Anexe o gráfico obtido ao seu trabalho. Observe que a figura elaborada no presente exercício corresponde à figura 4 do artigo de Hénon e Heiles.
     \begin{answer}[Ítem 5.3]
     \end{answer}
-
+    \item[(5.4)] Repita os procedimentos do item anterior para \( E = 0.125 \). Anexe o gráfico obtido ao seu trabalho. Esta nova figura corresponde à figura 5 do artigo de Hénon e Heiles.
     \begin{answer}[Ítem 5.4]
     \end{answer}
-
+    \item[(5.5)] Escolha uma condição inicial correspondente a uma trajetória periódica ou quase periódica na seção de Poincaré com \( E = 0.125 \). Considerando a condição inicial escolhida, utilize o método de Euler simplético para a construção de uma figura com os valores de \( q_1 \times t \), \( p_1 \times t \), \( q_2 \times t \) e \( p_2 \times t \). Anexe o gráfico obtido ao seu trabalho. Com o propósito de permitir uma visualização adequada do comportamento regular nas curvas apresentadas, selecione cuidadosamente o intervalo total de integração temporal.
     \begin{answer}[Ítem 5.5]
     \end{answer}
-
+    \item[(5.6)] Repita os procedimentos do exercício anterior para uma condição inicial correspondente a uma trajetória caótica na seção de Poincaré com \( E = 0.125 \). Anexe o gráfico obtido ao seu trabalho.
     \begin{answer}[Ítem 5.6]
     \end{answer}
-
+    \item[(5.7)] Construa uma seção de Poincaré para trajetórias com energia total \( E = 0.16667 \). Anexe a figura elaborada ao seu trabalho. Este gráfico corresponde à figura 6 do artigo de Hénon e Heiles.
     \begin{answer}[Ítem 5.7]
     \end{answer}
+\end{itemize}
+\end{center}
+
+ \begin{minipage}[c]{0.84\textwidth}
+        \hspace{2em}%
+        [1] Os códigos deste estudo dirigido podem ser acessados em modo leitura em \url{http://academic-codex.github.io/PGF5005-Mecanica-Classica}.
+      \end{minipage}
+      \hfill
+      \begin{minipage}[c]{0.13\textwidth}
+    \centering
+            \includegraphics[width=0.7\linewidth]{figuras/image.png}
+      \end{minipage}
 \end{document}
