@@ -95,11 +95,10 @@
 
   // 2) Chave ofuscada: base64 da chave hex invertida (exemplo)
   //    Exemplo de ofuscação: chaveHex = reverse(atob('BASE64_OF_HEX'))
-  const obf = 'c2Vtb25vX2Jhc2U2NF9leGFtcGxl'; // << troque pela sua ofuscação real
-  const keyHex = atob(obf).split('').reverse().join(''); // desfaz ofuscação
+  const obf = 'YWE5YjQ4ODQ1MTkyNDJiZjQzYTE5Y2Y3NzZlNWE3NGEyYjVkNDI4MjllNDU4MjA0ZTc2MTFlNDIzYmYwZjc2Ng=='; 
 
   // converte hex -> Uint8Array
-  const keyBytes = new Uint8Array(keyHex.match(/.{2}/g).map(h => parseInt(h,16)));
+  const keyBytes = new Uint8Array(atob(obf).split('').reverse().join('').match(/.{2}/g).map(h => parseInt(h,16)));
 
   const b64ToBuf = b64 => Uint8Array.from(atob(b64), c=>c.charCodeAt(0)).buffer;
   const resp = await fetch(encUrl);
