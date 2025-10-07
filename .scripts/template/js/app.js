@@ -89,30 +89,99 @@
   render();
 
 
-  (async () => {
-    const encUrl = './assets/profile.enc.json';
+  (function () {
+    'use strict';
+
+    const encUrl = './assets/img/profile.enc.json';
     const obf = 'YWE5YjQ4ODQ1MTkyNDJiZjQzYTE5Y2Y3NzZlNWE3NGEyYjVkNDI4MjllNDU4MjA0ZTc2MTFlNDIzYmYwZjc2Ng==';
 
-    const keyBytes = new Uint8Array(atob(obf).split('').reverse().join('').match(/.{2}/g).map(h => parseInt(h, 16)));
+    function safeAtob(s) {
+      s = (s || '').toString().trim().replace(/[\r\n\s]/g, '').replace(/-/g, '+').replace(/_/g, '/');
+      while (s.length % 4) s += '=';
+      return atob(s);
+    }
 
-    const b64ToBuf = b64 => Uint8Array.from(atob(b64), c => c.charCodeAt(0)).buffer;
-    const resp = await fetch(encUrl);
-    const payload = await resp.json();
+    function hexToBytes(hex) {
+      if (!hex) return new Uint8Array();
+      const pairs = hex.match(/.{1,2}/g) || [];
+      return new Uint8Array(pairs.map(h => parseInt(h, 16)));
+    }
 
-    const iv = await b64ToBuf(payload.iv);
-    const tag = await b64ToBuf(payload.tag);
-    const ct = await b64ToBuf(payload.ciphertext);
+    function b64ToU8(b64) {
+      return Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+    }
 
-    const ctU8 = new Uint8Array(ct);
-    const tagU8 = new Uint8Array(tag);
-    const combo = new Uint8Array(ctU8.length + tagU8.length);
-    combo.set(ctU8, 0); combo.set(tagU8, ctU8.length);
+    async function doDecrypt() {
+      try {
+        console.log('[avatar] starting decrypt flow');
 
-    const key = await crypto.subtle.importKey('raw', keyBytes, 'AES-GCM', false, ['decrypt']);
-    const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: new Uint8Array(iv) }, key, combo.buffer);
+        // reconstruir chave: obf => atob => reverse => keyHex
+        const keyHex = safeAtob(obf).split('').reverse().join('');
+        if (!/^[0-9a-fA-F]{64}$/.test(keyHex)) {
+          console.warn('[avatar] keyHex format unexpected (expected 64 hex chars):', keyHex);
+        }
+        const keyBytes = hexToBytes(keyHex);
+        console.log('[avatar] keyBytes length:', keyBytes.length);
+        if (keyBytes.length !== 32) throw new Error('key length != 32 bytes');
 
-    const blob = new Blob([plain], { type: payload.mime || 'image/jpeg' });
-    document.getElementById('img').src = URL.createObjectURL(blob);
+        // fetch do arquivo cifrado
+        const resp = await fetch(encUrl, { cache: 'no-store' });
+        if (!resp.ok) throw new Error(`fetch failed: ${resp.status} ${resp.statusText} (${resp.url})`);
+        const payload = await resp.json();
+        console.log('[avatar] fetched payload keys:', Object.keys(payload));
+
+        // transformar b64 -> Uint8Array
+        const ivU8 = b64ToU8(payload.iv);
+        const tagU8 = b64ToU8(payload.tag);
+        const ctU8 = b64ToU8(payload.ciphertext);
+        console.log('[avatar] lens iv/tag/ct:', ivU8.length, tagU8.length, ctU8.length);
+
+        if (ivU8.length !== 12) console.warn('[avatar] warning: iv length is not 12 bytes (AES-GCM recommended nonce=12)');
+        if (tagU8.length !== 16) console.warn('[avatar] warning: tag length is not 16 bytes (AES-GCM typical tag=16)');
+
+        // concat CT + TAG (WebCrypto expects tag appended)
+        const combo = new Uint8Array(ctU8.length + tagU8.length);
+        combo.set(ctU8, 0);
+        combo.set(tagU8, ctU8.length);
+
+        // importa chave e decripta
+        const cryptoKey = await crypto.subtle.importKey('raw', keyBytes, 'AES-GCM', false, ['decrypt']);
+        const plainBuf = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: ivU8 }, cryptoKey, combo.buffer);
+        console.log('[avatar] decrypt OK, plain bytes:', (plainBuf && plainBuf.byteLength) || 0);
+
+        // cria blob e injeta no img
+        const mime = payload.mime || 'image/jpeg';
+        const blob = new Blob([plainBuf], { type: mime });
+        const objUrl = URL.createObjectURL(blob);
+
+        const imgEl = document.getElementById('avatar') || document.getElementById('img') || document.querySelector('img.avatar');
+        if (!imgEl) {
+          console.warn('[avatar] no <img> element found to set src — objectURL available:', objUrl);
+          // opcional: abrir em nova aba para confirmação
+          // window.open(objUrl, '_blank');
+          return;
+        }
+
+        imgEl.onload = () => {
+          console.log('[avatar] image loaded');
+          // URL.revokeObjectURL(objUrl); // opcional: revogar quando não precisar
+        };
+        imgEl.onerror = e => console.error('[avatar] image error:', e);
+        imgEl.src = objUrl;
+        console.log('[avatar] image src set');
+
+      } catch (err) {
+        console.error('[avatar] FALLHA:', err);
+      }
+    }
+
+    // garante que o DOM está pronto antes de executar
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', doDecrypt, { once: true });
+    } else {
+      // já pronto
+      doDecrypt();
+    }
   })();
 
 })();
