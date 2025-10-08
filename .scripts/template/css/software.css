@@ -86,7 +86,7 @@
 }
 
 .file-notebook::after {
-    content: " .ipynb";
+    content: ".ipynb";
     color: var(--muted);
     font-size: .8rem;
     margin-left: 6px
