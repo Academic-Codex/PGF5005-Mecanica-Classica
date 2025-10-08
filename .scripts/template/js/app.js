@@ -26,6 +26,7 @@
 
       if (node.type === 'dir') {
         label.textContent = node.name;
+        
         label.onclick = () => li.classList.toggle('open');
 
         // >>> estado inicial expandido
@@ -41,7 +42,8 @@
       } else {
         if (node.nb_html) {
           const a = document.createElement('a');
-          a.textContent = node.name;
+          const base = node.name.replace(/\.ipynb$/i, '');
+          a.textContent = base;
           a.href = '#';
           a.className = 'file-notebook';
           a.onclick = (e) => { e.preventDefault(); viewer.src = node.nb_html; };
