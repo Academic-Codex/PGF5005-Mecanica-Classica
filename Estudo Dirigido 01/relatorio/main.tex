@@ -117,9 +117,10 @@ def euler_conventional(q, p, dt):
 \end{lstlisting}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \item[(4.3)] A partir do programa desenvolvido no exercício anterior, construa curvas de \( q(t) \times t \) e \( p(t) \times t \) considerando dois conjuntos de condições iniciais. Primeiramente, escolha uma condição inicial que resulte na libração do pêndulo. Em seguida, escolha uma condição inicial que resulte na rotação do pêndulo. Em cada caso, utilize três valores distintos para o passo de tempo, \( \Delta t = 10^{-1}, 10^{-2}, 10^{-3} \), colocando as três curvas em um mesmo gráfico. Anexe as figuras elaboradas ao seu trabalho. Comente os resultados, ou seja, avalie se as curvas obtidas são consistentes com o comportamento esperado para as variáveis \( q(t) \) e \( p(t) \) do pêndulo simples.
+    \item[(4.3)] A partir do programa desenvolvido no exercício anterior, construa curvas de \( q(t) \times t \) e \( p(t) \times t \) considerando dois conjuntos de condições iniciais. Primeiramente, escolha uma condição inicial que resulte na libração do pêndulo. Em seguida, escolha uma condição inicial que resulte na rotação do pêndulo. Em cada caso, utilize três valores distintos para o passo de tempo, \( \Delta t = 10^{-1}, 10^{-2}, 10^{-3} \), colocando as três curvas em um mesmo gráfico. Anexe as figuras elaboradas ao seu trabalho. Comente os resultados, ou seja, avalie se as curvas obtidas são consistentes com o comportamento esperado para as variáveis \( q(t) \) e \( p(t) \) do pêndulo simples.
     
     \begin{answer}[Ítem 4.3]
+        \begin{center}
     \includegraphics[width=0.9\textwidth]{figuras/Pendulo-Libracao.png}
     
     % Adiciona a legenda e o rótulo da Figura (mesmo sem o ambiente figure)
@@ -133,41 +134,153 @@ def euler_conventional(q, p, dt):
         Evolução temporal do momento canônico $p(t)$ usando o Método de Euler Convencional.
     }
     \bigskip
+        \end{center}
     Podemos observar o crescimento artificial da energia do sistema ao longo do tempo. Para passos de integração menores, o erro é reduzido, mas ainda assim a energia do sistema na simulação não é conservado, como deveria.
     Isso ocorre devido ao erro numérico acumulado em cada passo da integração. 
-    Para um intervalo de tempo curto este método pode ser adequado desde que se mantenha o passo da integração pequeno o suficiente para que o erro se mantenha dentro do limite tolerado.
 \end{answer}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \item[(4.4)] Verifique numericamente o comportamento da energia total do pêndulo simples. Com este objetivo, construa os gráficos de \( E(t) \times t \) para as duas condições iniciais utilizadas no exercício anterior. Utilize novamente os três valores distintos para o passo de tempo, \( \Delta t = 10^{-1}, 10^{-2}, 10^{-3} \), colocando as três curvas obtidas em um mesmo gráfico. Anexe as figuras elaboradas ao seu trabalho. Comente os resultados, ou seja, avalie se as curvas obtidas são compatíveis com o comportamento esperado para a energia total do sistema.
 
     \begin{answer}[Ítem 4.4]
+\begin{center}
+    % Adiciona a legenda e o rótulo da Figura (mesmo sem o ambiente figure)
+    \includegraphics[width=0.9\textwidth]{figuras/Pendulo-Energia.png}
+    \captionof{figure}{
+        Evolução temporal da energia $E$ do sistema, usando o Método de Euler Convencional.
+    }
+
+    
+    \bigskip
+    \end{center}
+    Podemos observar o crescimento artificial da energia do sistema ao longo do tempo. Para passos de integração menores, o erro é reduzido, mas ainda assim a energia do sistema na simulação não é conservado, como deveria.
+ Para um intervalo de tempo curto este método pode ser adequado desde que se mantenha o passo da integração pequeno o suficiente para que o erro se mantenha dentro do limite tolerado.
+
     \end{answer}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \item[(4.5)] Construa os gráficos de \( p(t) \times q(t) \) para as duas condições iniciais usadas nos exercícios anteriores. Em cada caso, utilize novamente os três valores distintos para o passo de tempo, \( \Delta t = 10^{-1}, 10^{-2}, 10^{-3} \), colocando todas as três curvas em um mesmo gráfico. Anexe as figuras elaboradas ao seu trabalho. Comente os resultados, ou seja, avalie se as trajetórias obtidas numericamente apresentam o comportamento esperado do pêndulo simples no espaço de fase.
 
         \begin{answer}[Ítem 4.5]
+                    \begin{center}
+\begin{center}
+\begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figuras/Pendulo-Libracao-EspacoFase.png}
+    \captionof{figure}{
+        Trajetória de Libração do Pêndulo Simples utilizando o método de Euler Convencional.
+    }
+\end{minipage}
+\hfill
+\begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figuras/Pendulo-Rotacao-EspacoFase.png}
+    \captionof{figure}{
+        Trajetória de Rotação do Pêndulo Simples utilizando o método de Euler Convencional.
+    }
+\end{minipage}
+\end{center}
+    \bigskip
+
+        \end{center}
+        Na libração o comportamento esperado é uma trajetória fechada e cíclica, sem que divirja do centro. Na rotação espera-se uma trajetória oscilatória sem alterações na amplitude. Os desvios observados são decorrentes de erro numérico do método utilizado.
     \end{answer}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \item[(4.7)] Realize a implementação computacional do método de Euler simplético para resolver as equações de movimento do pêndulo simples. Anexe o código do programa desenvolvido ao seu trabalho.
-    \begin{answer}[Ítem 4.7]
-    \end{answer}
+
+    \begin{lstlisting}[language=Python, caption={Implementação do método de Euler Simplético}, label={lst:euler_simpletico}]
+def euler_symplectic(q, p, dt):
+    # 1. Atualiza a posição (usa o momento p^n)
+    # dH/dp = p
+    q_new = q + dt * p
+    
+    # 2. Atualiza o momento (usa a nova posição q^(n+1))
+    # dH/dq = sin(q_new)
+    p_dot = -np.sin(q_new)
+    p_new = p + dt * p_dot
+    
+    return q_new, p_new
+    \end{lstlisting}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \item[(4.8)] Utilizando o programa desenvolvido no exercício anterior, repita os procedimentos do exercício 4.3, ou seja, refaça os gráficos para \( q(t) \times t \) e \( p(t) \times t \), considerando novamente as mesmas condições iniciais de libração e rotação para os três tamanhos distintos de passo de tempo. Anexe as figuras elaboradas ao seu trabalho. Comente os resultados do método Euler simplético em comparação com as curvas correspondentes obtidas pelo método de Euler convencional.
+    \item[(4.8)] Utilizando o programa desenvolvido no exercício anterior, repita os procedimentos do exercício 4.3, ou seja, refaça os gráficos para \( q(t) \times t \) e \( p(t) \times t \), considerando novamente as mesmas condições iniciais de libração e rotação para os três tamanhos distintos de passo de tempo. Anexe as figuras elaboradas ao seu trabalho. Comente os resultados do método Euler simplético em comparação com as curvas correspondentes obtidas pelo método de Euler convencional.
     \begin{answer}[Ítem 4.8]
+                \begin{center}
+
+    \begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figuras/Pendulo-Libracao-Simpletico.png}
+    \captionof{figure}{
+        
+    }
+\end{minipage}
+\hfill
+\begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figuras/Pendulo-Rotacao-Simpletico.png}
+    \captionof{figure}{
+        
+    }
+\end{minipage}
+
+    
+    \bigskip
+    \end{center}
     \end{answer}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \item[(4.9)] Empregando novamente a implementação computacional do método de Euler simplético, repita os procedimentos do exercício 4.4, ou seja, reproduza os gráficos para \( E(t) \times t \), para as mesmas condições iniciais e passos de tempo. Anexe as figuras elaboradas ao seu trabalho. Comente os resultados em comparação com o método de Euler convencional.
     \begin{answer}[Ítem 4.9]
+        \begin{center}
+
+    \begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figuras/Pendulo-Energia-Libracao-Simpletico.png}
+    \captionof{figure}{
+        
+    }
+\end{minipage}
+\hfill
+\begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figuras/Pendulo-Energia-Rotacao-Simpletico.png}
+    \captionof{figure}{
+        
+    }
+\end{minipage}
+
+    
+    \bigskip
+    \end{center}
+
     \end{answer}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \item[(4.10)] Por fim, em analogia com o exercício 4.5, utilize a versão simplética do método de Euler para construir novamente os gráficos de \( p(t) \times q(t) \), considerando as mesmas condições iniciais e passos de tempo. Anexe as figuras elaboradas ao seu trabalho. Comente os resultados em comparação com o Euler convencional.
     \begin{answer}[Ítem 4.10]
+                \begin{center}
+
+    \begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figuras/Pendulo-Libracao-EspacoFase-Simpletico.png}
+    \captionof{figure}{
+        
+    }
+\end{minipage}
+\hfill
+\begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figuras/Pendulo-Rotacao-EspacoFase-Simpletico.png}
+    \captionof{figure}{
+        
+    }
+\end{minipage}
+
+    
+    \bigskip
+    \end{center}
     \end{answer}
 \end{itemize}
 \end{center}
