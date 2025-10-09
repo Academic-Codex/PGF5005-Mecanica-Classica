@@ -10,7 +10,19 @@
 \usepackage{amsmath}
 \usepackage{xcolor}
 \usepackage[utf8]{inputenc}
+
 \usepackage{listingsutf8}
+\lstset{
+  inputencoding=utf8,
+  extendedchars=true,
+  literate={á}{{\'a}}1 {ã}{{\~a}}1 {â}{{\^a}}1 {à}{{\`a}}1
+           {Á}{{\'A}}1 {Ã}{{\~A}}1 {Â}{{\^A}}1 {À}{{\`A}}1
+           {é}{{\'e}}1 {ê}{{\^e}}1 {É}{{\'E}}1 {Ê}{{\^E}}1
+           {í}{{\'i}}1 {Í}{{\'I}}1
+           {ó}{{\'o}}1 {õ}{{\~o}}1 {ô}{{\^o}}1 {Ó}{{\'O}}1 {Õ}{{\~O}}1 {Ô}{{\^O}}1
+           {ú}{{\'u}}1 {Ú}{{\'U}}1
+           {ç}{{\c{c}}}1 {Ç}{{\c{C}}}1
+}
 \usepackage{graphicx}
 \lstset{
     inputencoding=utf8,
@@ -209,21 +221,21 @@ def euler_symplectic(q, p, dt):
     \begin{answer}[Ítem 4.8]
                 \begin{center}
 
-    \begin{minipage}{0.48\textwidth}
-    \centering
+
+
     \includegraphics[width=\linewidth]{figuras/Pendulo-Libracao-Simpletico.png}
     \captionof{figure}{
         
     }
-\end{minipage}
-\hfill
-\begin{minipage}{0.48\textwidth}
-    \centering
+
+
+
+
     \includegraphics[width=\linewidth]{figuras/Pendulo-Rotacao-Simpletico.png}
     \captionof{figure}{
         
     }
-\end{minipage}
+
 
     
     \bigskip
@@ -291,23 +303,74 @@ def euler_symplectic(q, p, dt):
 \begin{itemize}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \item[(5.2)] Realize a implementação computacional do método de Euler simplético para a Hamiltoniana de Hénon-Heiles. O programa desenvolvido será utilizado nos próximos exercícios para a construção de seções de Poincaré no plano \( p_2 \times q_2 \), considerando \( q_1 = 0 \) e \( p_1 \ge 0 \). De maneira complementar ao método de Euler simplético, implemente também o algoritmo de Hénon para a construção de seções de Poincaré, conforme apresentado anteriormente neste estudo dirigido. Anexe o código do programa desenvolvido ao seu trabalho.
-    \begin{answer}[Ítem 5.2]
-    \end{answer}
+
+            \begin{lstlisting}[language=Python, caption={Implementação do método de Euler Simplético}, label={lst:euler_simpletico}]
+def euler_symplectic_step(q1, q2, p1, p2, dt):
+    # Atualiza as posições
+    q1_new = q1 + dt * p1
+    q2_new = q2 + dt * p2
+    
+    # Atualiza os momentos usando as novas posições
+    p1_new = p1 - dt * (q1_new + 2 * q1_new * q2_new)
+    p2_new = p2 - dt * (q2_new + q1_new**2 - q2_new**2)
+    
+    return q1_new, q2_new, p1_new, p2_new
+\end{lstlisting}
+
+\begin{lstlisting}[language=Python, caption={Implementação do algoritmo de Hénon}, label={lst:henon_algorithm}]
+def henon_alg(q1_old, q2_old, p1_old, p2_old, q1, p1):
+    # Condição de cruzamento
+    if q1_old < 0 and q1 >= 0 and p1 >= 0:
+        # Δq1 necessário para alcançar q1=0
+        d_q1 = -q1_old
+
+        # Euler em função de q1
+        q2_intersec = q2_old + d_q1 * (p2_old / p1_old)
+        p2_intersec = p2_old + d_q1 * (-(q2_old + q1_old**2 - q2_old**2) / p1_old)
+
+        return q2_intersec, p2_intersec
+\end{lstlisting}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \item[(5.3)] Construa uma seção de Poincaré para trajetórias com energia total \( E = 0.08333 \). Anexe o gráfico obtido ao seu trabalho. Observe que a figura elaborada no presente exercício corresponde à figura 4 do artigo de Hénon e Heiles.
     \begin{answer}[Ítem 5.3]
+                        \begin{center}
+    \includegraphics[width=0.6\linewidth]{figuras/Henon-Poincare-Energia0083.png}
+    \captionof{figure}{
+        Seção de Poincaré para a Hamiltoniana de Hénon-Heiles com energia total \( E = 0.08333 \).
+    }
+    \end{center}
+
     \end{answer}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \item[(5.4)] Repita os procedimentos do item anterior para \( E = 0.125 \). Anexe o gráfico obtido ao seu trabalho. Esta nova figura corresponde à figura 5 do artigo de Hénon e Heiles.
     \begin{answer}[Ítem 5.4]
+                                \begin{center}
+    \includegraphics[width=0.6\linewidth]{figuras/Henon-Poincare-Energia0125.png}
+    \captionof{figure}{
+        Seção de Poincaré para a Hamiltoniana de Hénon-Heiles com energia total \( E = 0.08333 \).
+    }
+    \end{center}
     \end{answer}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \item[(5.5)] Escolha uma condição inicial correspondente a uma trajetória periódica ou quase periódica na seção de Poincaré com \( E = 0.125 \). Considerando a condição inicial escolhida, utilize o método de Euler simplético para a construção de uma figura com os valores de \( q_1 \times t \), \( p_1 \times t \), \( q_2 \times t \) e \( p_2 \times t \). Anexe o gráfico obtido ao seu trabalho. Com o propósito de permitir uma visualização adequada do comportamento regular nas curvas apresentadas, selecione cuidadosamente o intervalo total de integração temporal.
     \begin{answer}[Ítem 5.5]
+                                        \begin{center}
+    \includegraphics[width=0.6\linewidth]{figuras/Henon-Trajetorias-Periodicas.png}
+    \captionof{figure}{
+        Trajetórias periódicas.
+    }
+    \end{center}
     \end{answer}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \item[(5.6)] Repita os procedimentos do exercício anterior para uma condição inicial correspondente a uma trajetória caótica na seção de Poincaré com \( E = 0.125 \). Anexe o gráfico obtido ao seu trabalho.
     \begin{answer}[Ítem 5.6]
+                                                \begin{center}
+    \includegraphics[width=0.6\linewidth]{figuras/Henon-Trajetorias-CaoticasE0125.png.png}
+    \captionof{figure}{
+        Trajetórias caóticas.
+    }
+    \end{center}
     \end{answer}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \item[(5.7)] Construa uma seção de Poincaré para trajetórias com energia total \( E = 0.16667 \). Anexe a figura elaborada ao seu trabalho. Este gráfico corresponde à figura 6 do artigo de Hénon e Heiles.
