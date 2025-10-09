@@ -137,18 +137,17 @@ def euler_conventional(q, p, dt):
     
     % Adiciona a legenda e o rótulo da Figura (mesmo sem o ambiente figure)
     \captionof{figure}{
-        Evolução temporal do momento canônico $p(t)$ usando o Método de Euler Convencional.
+        Evolução no tempo do momento $p(t)$ e posição $q(t)$ do pêndulo simples em trajetória de libração utilizando o método euler convencional.
     }
     \includegraphics[width=0.9\textwidth]{figuras/Pendulo-Rotacao.png}
     
     % Adiciona a legenda e o rótulo da Figura (mesmo sem o ambiente figure)
     \captionof{figure}{
-        Evolução temporal do momento canônico $p(t)$ usando o Método de Euler Convencional.
+        Evolução no tempo do momento $p(t)$ e posição $q(t)$ do pêndulo simples em trajetória de rotação utilizando o método euler convencional.
     }
     \bigskip
         \end{center}
-    Podemos observar o crescimento artificial da energia do sistema ao longo do tempo. Para passos de integração menores, o erro é reduzido, mas ainda assim a energia do sistema na simulação não é conservado, como deveria.
-    Isso ocorre devido ao erro numérico acumulado em cada passo da integração. 
+    Podemos observar o aumento da energia do sistema ao longo do tempo, devido a acumulação de erro numérico de integração. Para passos de integração menores, o erro é reduzido, mas ainda assim a energia do sistema na simulação não é conservado, como deveria.
 \end{answer}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -165,7 +164,7 @@ def euler_conventional(q, p, dt):
     
     \bigskip
     \end{center}
-    Podemos observar o crescimento artificial da energia do sistema ao longo do tempo. Para passos de integração menores, o erro é reduzido, mas ainda assim a energia do sistema na simulação não é conservado, como deveria.
+    Podemos observar o aumento artificial da energia do sistema ao longo do tempo.
  Para um intervalo de tempo curto este método pode ser adequado desde que se mantenha o passo da integração pequeno o suficiente para que o erro se mantenha dentro do limite tolerado.
 
     \end{answer}
@@ -195,7 +194,7 @@ def euler_conventional(q, p, dt):
     \bigskip
 
         \end{center}
-        Na libração o comportamento esperado é uma trajetória fechada e cíclica, sem que divirja do centro. Na rotação espera-se uma trajetória oscilatória sem alterações na amplitude. Os desvios observados são decorrentes de erro numérico do método utilizado.
+        Na libração o comportamento esperado é uma trajetória fechada e cíclica, sem que divirja do centro. Na rotação espera-se uma trajetória oscilatória onde os pontos máximos e mínimos da amplitude permaneçam constantes. Os desvios observados são decorrentes de erro numérico do método utilizado.
     \end{answer}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -225,7 +224,7 @@ def euler_symplectic(q, p, dt):
 
     \includegraphics[width=\linewidth]{figuras/Pendulo-Libracao-Simpletico.png}
     \captionof{figure}{
-        
+       Evolução no tempo do momento $p(t)$ e posição $q(t)$ do pêndulo simples em trajetória de rotação utilizando o método euler simplético.
     }
 
 
@@ -233,13 +232,13 @@ def euler_symplectic(q, p, dt):
 
     \includegraphics[width=\linewidth]{figuras/Pendulo-Rotacao-Simpletico.png}
     \captionof{figure}{
-        
+        Evolução no tempo do momento $p(t)$ e posição $q(t)$ do pêndulo simples em trajetória de rotação utilizando o método euler simplético.
     }
 
-
-    
     \bigskip
-    \end{center}
+        \end{center}
+    Utilizando o método de integração simplético, no qual a área de integração se conserva, este efeito coincide com o teorema de Liouville, que determina a imcompressibilidade do fluxo gerado por sistemas Hamiltonianos. Assim, o método simplético é mais adequado para simulações de longo prazo, onde a conservação da energia e a precisão são cruciais.
+
     \end{answer}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -251,7 +250,7 @@ def euler_symplectic(q, p, dt):
     \centering
     \includegraphics[width=\linewidth]{figuras/Pendulo-Energia-Libracao-Simpletico.png}
     \captionof{figure}{
-        
+        Evolução temporal da energia $E$ do sistema, usando o Método de Euler Simplético.
     }
 \end{minipage}
 \hfill
@@ -259,14 +258,14 @@ def euler_symplectic(q, p, dt):
     \centering
     \includegraphics[width=\linewidth]{figuras/Pendulo-Energia-Rotacao-Simpletico.png}
     \captionof{figure}{
-        
+        Evolução temporal da energia $E$ do sistema, usando o Método de Euler Simplético.
     }
 \end{minipage}
 
     
     \bigskip
     \end{center}
-
+    Conforme esperado, observamos que diferente do método de integração convencional, o método simplético corrige o acúmulo de erro numérico, fazendo com que a energia durante a simulação não seja alterada em decorrência de erro computacional.
     \end{answer}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -278,7 +277,7 @@ def euler_symplectic(q, p, dt):
     \centering
     \includegraphics[width=\linewidth]{figuras/Pendulo-Libracao-EspacoFase-Simpletico.png}
     \captionof{figure}{
-        
+        Trajetória de Libração do Pêndulo Simples utilizando o método de Euler Simplético.
     }
 \end{minipage}
 \hfill
@@ -286,13 +285,14 @@ def euler_symplectic(q, p, dt):
     \centering
     \includegraphics[width=\linewidth]{figuras/Pendulo-Rotacao-EspacoFase-Simpletico.png}
     \captionof{figure}{
-        
+        Trajetória de Rotação do Pêndulo Simples utilizando o método de Euler Simplético.
     }
 \end{minipage}
 
     
     \bigskip
     \end{center}
+    Utilizando a versão simplética do método de integração de Euler, em que o acúmulo de erro numérico é corrigido, observamos na simulação o comportamento esperado do sistema conservativo. Isto é, a trajetória do movimento de libração no espaço de fases é confinada a uma região circular e o os pontos máximo e mínimo das amplitudes das trajetórias no espaço de fases do movimento de rotação permanecem constantes. 
     \end{answer}
 \end{itemize}
 \end{center}
@@ -356,7 +356,7 @@ def henon_alg(q1_old, q2_old, p1_old, p2_old, q1, p1):
     \item[(5.5)] Escolha uma condição inicial correspondente a uma trajetória periódica ou quase periódica na seção de Poincaré com \( E = 0.125 \). Considerando a condição inicial escolhida, utilize o método de Euler simplético para a construção de uma figura com os valores de \( q_1 \times t \), \( p_1 \times t \), \( q_2 \times t \) e \( p_2 \times t \). Anexe o gráfico obtido ao seu trabalho. Com o propósito de permitir uma visualização adequada do comportamento regular nas curvas apresentadas, selecione cuidadosamente o intervalo total de integração temporal.
     \begin{answer}[Ítem 5.5]
                                         \begin{center}
-    \includegraphics[width=0.6\linewidth]{figuras/Henon-Trajetorias-Periodicas.png}
+    \includegraphics[width=\linewidth]{figuras/Henon-Trajetorias-Periodicas.png}
     \captionof{figure}{
         Trajetórias periódicas.
     }
@@ -366,7 +366,7 @@ def henon_alg(q1_old, q2_old, p1_old, p2_old, q1, p1):
     \item[(5.6)] Repita os procedimentos do exercício anterior para uma condição inicial correspondente a uma trajetória caótica na seção de Poincaré com \( E = 0.125 \). Anexe o gráfico obtido ao seu trabalho.
     \begin{answer}[Ítem 5.6]
                                                 \begin{center}
-    \includegraphics[width=0.6\linewidth]{figuras/Henon-Trajetorias-CaoticasE0125.png.png}
+    \includegraphics[width=\linewidth]{figuras/Henon-Trajetorias-CaoticasE0125.png}
     \captionof{figure}{
         Trajetórias caóticas.
     }
@@ -375,6 +375,12 @@ def henon_alg(q1_old, q2_old, p1_old, p2_old, q1, p1):
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \item[(5.7)] Construa uma seção de Poincaré para trajetórias com energia total \( E = 0.16667 \). Anexe a figura elaborada ao seu trabalho. Este gráfico corresponde à figura 6 do artigo de Hénon e Heiles.
     \begin{answer}[Ítem 5.7]
+                                                        \begin{center}
+    \includegraphics[width=0.6\linewidth]{figuras/Henon-Poincare-Energia016.png}
+    \captionof{figure}{
+        Trajetórias caóticas.
+    }
+    \end{center}
     \end{answer}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{itemize}
@@ -382,7 +388,7 @@ def henon_alg(q1_old, q2_old, p1_old, p2_old, q1, p1):
 
  \begin{minipage}[c]{0.84\textwidth}
         \hspace{2em}%
-        [1] Os códigos deste estudo dirigido podem ser acessados em modo leitura em \url{http://academic-codex.github.io/PGF5005-Mecanica-Classica}.
+        Os códigos deste estudo dirigido podem ser acessados em \url{http://academic-codex.github.io/PGF5005-Mecanica-Classica}.
       \end{minipage}
       \hfill
       \begin{minipage}[c]{0.13\textwidth}
