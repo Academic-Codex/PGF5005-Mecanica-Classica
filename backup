@@ -1,0 +1,182 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.optimize import newton # Usado para encontrar condição inicial, não para o integrador principal
+import warnings
+
+warnings.filterwarnings('ignore') # Ignora avisos de sqrt de números negativos (tratado no código)
+
+class WalkerFordIntegrator:
+    """ Implementa o integrador simplético para a Hamiltoniana de Walker-Ford. """
+    def __init__(self, alpha, beta):
+        self.alpha = alpha
+        self.beta = beta
+        self.state = np.zeros(4) # [phi1, phi2, J1, J2]
+    
+    # --- Funções da Hamiltoniana e suas derivadas ---
+    def H(self, phi1, phi2, J1, J2):
+        # if J1 < 0 or J2 < 0: return np.inf
+        # term_alpha = self.alpha * J1 * J2 * np.cos(2*phi1 - 2*phi2)
+        # term_beta = self.beta * J1 * J2**(1.5) * np.cos(2*phi1 - 3*phi2)
+        # H0 = J1 + J2 - J1**2 - 3*J1*J2 + J2**2
+        # return H0 + term_alpha + term_beta
+        
+        # 1. Calcula todos os termos da Hamiltoniana para todos os pontos.
+        # Note que a ordem dos cálculos mudou: primeiro calculamos H para todos os pontos,
+        # depois verificamos a condição.
+        H0 = J1 + J2 - J1**2 - 3*J1*J2 + J2**2
+        term_alpha = self.alpha * J1 * J2 * np.cos(2*phi1 - 2*phi2)
+        term_beta = self.beta * J1 * J2**(1.5) * np.cos(2*phi1 - 3*phi2)
+        
+        H_calculado = H0 + term_alpha + term_beta
+        
+        # 2. Cria uma condição booleana (um array de True/False).
+        # O operador '|' (ou) funciona elemento a elemento em arrays NumPy.
+        condicao_invalida = (J1 < 0) | (J2 < 0)
+        
+        # 3. Usa np.where para aplicar a condição.
+        # - Se um elemento de 'condicao_invalida' for True, o valor correspondente será np.inf.
+        # - Se for False, o valor correspondente será o de 'H_calculado'.
+        return np.where(condicao_invalida, np.inf, H_calculado)
+    
+    def dH_dJ1(self, phi1, phi2, J1, J2):
+        return 1 - 2*J1 - 3*J2 + self.alpha*J2*np.cos(2*phi1-2*phi2) + self.beta*J2**1.5*np.cos(2*phi1-3*phi2)
+    
+    def dH_dJ2(self, phi1, phi2, J1, J2):
+        return 1 - 3*J1 + 2*J2 + self.alpha*J1*np.cos(2*phi1-2*phi2) + 1.5*self.beta*J1*J2**0.5*np.cos(2*phi1-3*phi2)
+
+    def dH_dphi1(self, phi1, phi2, J1, J2):
+        return -2*self.alpha*J1*J2*np.sin(2*phi1-2*phi2) - 2*self.beta*J1*J2**1.5*np.sin(2*phi1-3*phi2)
+
+    def dH_dphi2(self, phi1, phi2, J1, J2):
+        return 2*self.alpha*J1*J2*np.sin(2*phi1-2*phi2) + 3*self.beta*J1*J2**1.5*np.sin(2*phi1-3*phi2)
+    
+    # --- Segundas derivadas para o Jacobiano de Newton ---
+    def d2H_dJ1dphi1(self, phi1, phi2, J1, J2):
+        return -2*self.alpha*J2*np.sin(2*phi1-2*phi2) - 2*self.beta*J2**1.5*np.sin(2*phi1-3*phi2)
+    
+    def d2H_dJ1dphi2(self, phi1, phi2, J1, J2):
+        return 2*self.alpha*J2*np.sin(2*phi1-2*phi2) + 3*self.beta*J2**1.5*np.sin(2*phi1-3*phi2)
+
+    def d2H_dJ2dphi1(self, phi1, phi2, J1, J2):
+        return -2*self.alpha*J1*np.sin(2*phi1-2*phi2) - 3*self.beta*J1*J2**0.5*np.sin(2*phi1-3*phi2)
+        
+    def d2H_dJ2dphi2(self, phi1, phi2, J1, J2):
+        return 2*self.alpha*J1*np.sin(2*phi1-2*phi2) + 4.5*self.beta*J1*J2**0.5*np.sin(2*phi1-3*phi2)
+
+    # --- Solver de Sistema Linear (Decomposição LU) ---
+    def lu_decomposition(self, A):
+        N = A.shape[0]
+        L = np.eye(N)
+        U = A.copy()
+        for j in range(N):
+            for i in range(j + 1, N):
+                L[i, j] = U[i, j] / U[j, j]
+                U[i, :] -= L[i, j] * U[j, :]
+        return L, U
+
+    def lu_solve(self, L, U, b):
+        N = L.shape[0]
+        x = np.zeros(N)
+        y = np.zeros(N)
+        # Ly = b (forward substitution)
+        for i in range(N):
+            y[i] = b[i] - np.dot(L[i, :i], y[:i])
+        # Ux = y (backward substitution)
+        for i in range(N - 1, -1, -1):
+            x[i] = (y[i] - np.dot(U[i, i+1:], x[i+1:])) / U[i, i]
+        return x
+
+    # --- Solver Não-Linear (Método de Newton) ---
+    def newton_solver(self, phi_n, J_n, dt, tol=1e-10, max_iter=20):
+        phi_next = phi_n.copy() # Chute inicial
+        J1_n, J2_n = J_n
+
+        for _ in range(max_iter):
+            phi1_next, phi2_next = phi_next
+            
+            # Calcula o vetor de resíduos g
+            g1 = phi1_next - phi_n[0] - dt * self.dH_dJ1(phi1_next, phi2_next, J1_n, J2_n)
+            g2 = phi2_next - phi_n[1] - dt * self.dH_dJ2(phi1_next, phi2_next, J1_n, J2_n)
+            g = np.array([g1, g2])
+
+            if np.linalg.norm(g) < tol:
+                return phi_next
+            
+            # Calcula a matriz Jacobiana J_g
+            J_g11 = 1 - dt * self.d2H_dJ1dphi1(phi1_next, phi2_next, J1_n, J2_n)
+            J_g12 = -dt * self.d2H_dJ1dphi2(phi1_next, phi2_next, J1_n, J2_n)
+            J_g21 = -dt * self.d2H_dJ2dphi1(phi1_next, phi2_next, J1_n, J2_n)
+            J_g22 = 1 - dt * self.d2H_dJ2dphi2(phi1_next, phi2_next, J1_n, J2_n)
+            J_g = np.array([[J_g11, J_g12], [J_g21, J_g22]])
+            
+            # Resolve J_g * delta_phi = -g usando LU
+            L, U = self.lu_decomposition(J_g)
+            delta_phi = self.lu_solve(L, U, -g)
+            
+            phi_next += delta_phi
+
+        return phi_next # Retorna a melhor aproximação se não convergir
+
+    # --- Integrador Simplético ---
+    def symplectic_euler_step(self, state, dt):
+        phi_n = state[:2]
+        J_n = state[2:]
+
+        # Passo implícito para phi
+        phi_next = self.newton_solver(phi_n, J_n, dt)
+        
+        # Passo explícito para J
+        J1_next = J_n[0] - dt * self.dH_dphi1(phi_next[0], phi_next[1], J_n[0], J_n[1])
+        J2_next = J_n[1] - dt * self.dH_dphi2(phi_next[0], phi_next[1], J_n[0], J_n[1])
+        J_next = np.array([J1_next, J2_next])
+        
+        return np.concatenate((phi_next, J_next))
+        
+    # --- Algoritmo de Hénon para Seção de Poincaré ---
+    def integrate_and_poincare(self, initial_state, dt, num_steps, section_plane_phi=1.5*np.pi):
+        self.state = np.array(initial_state)
+        poincare_points = []
+
+        for _ in range(num_steps):
+            state_n = self.state.copy()
+            phi1_n = (state_n[0] % (2*np.pi))
+            
+            self.state = self.symplectic_euler_step(state_n, dt)
+            phi1_next = (self.state[0] % (2*np.pi))
+
+            # Verifica se cruzou a seção (q1=0, p1>0 => phi1 = 3pi/2)
+            # Garante que não conte o mesmo cruzamento várias vezes
+            if phi1_n < section_plane_phi and phi1_next >= section_plane_phi:
+                # Método de Hénon: refina o passo de tempo para encontrar o cruzamento exato
+                # Queremos encontrar dt' tal que phi1(t_n + dt') = section_plane_phi
+                # Resolvendo f(dt') = phi1(t_n + dt') - section_plane_phi = 0
+                dt_new = dt * (section_plane_phi - phi1_n) / (phi1_next - phi1_n)
+                
+                refined_state = self.symplectic_euler_step(state_n, dt_new)
+                poincare_points.append(refined_state)
+
+        return np.array(poincare_points)
+
+# --- Funções auxiliares de conversão e inicialização ---
+def action_angle_to_cartesian(J, phi):
+    # Lida com casos de J negativo que podem surgir de erros numéricos
+    J_safe = np.maximum(J, 0)
+    q = np.sqrt(2 * J_safe) * np.cos(phi)
+    p = -np.sqrt(2 * J_safe) * np.sin(phi)
+    return q, p
+
+def cartesian_to_action_angle(q, p):
+    J = (q**2 + p**2) / 2.0
+    phi = np.arctan2(-p, q)
+    return J, phi
+
+def find_initial_J1(E, J2, phi1, phi2, integrator, J1_guess=0.1):
+    # Encontra J1 que satisfaz H(J1, J2, phi1, phi2) = E
+    def energy_diff(J1):
+        if J1 < 0: return 1e10 # Penaliza J1 negativo
+        return integrator.H(phi1, phi2, J1, J2) - E
+    try:
+        J1_sol = newton(energy_diff, J1_guess, tol=1e-10, maxiter=50)
+        return J1_sol if J1_sol >= 0 else None
+    except RuntimeError:
+        return None
