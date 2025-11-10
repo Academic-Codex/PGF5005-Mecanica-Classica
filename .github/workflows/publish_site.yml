@@ -1,0 +1,18 @@
+name: Build & Publish (gh-pages)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+  repository_dispatch:
+    types: [ template-updated ] 
+
+jobs:
+  call-central:
+    uses: Academic-Codex/academic-codex.github.io/.github/workflows/build-template-site.yml@v1
+    with:
+      site_title: "${{ github.repository }}"
+      execute: "false"
+      template_repo: "Academic-Codex/academic-codex.github.io"
+      template_path: ".github/template"
+    secrets: inherit

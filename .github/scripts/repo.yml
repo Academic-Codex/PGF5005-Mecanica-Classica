@@ -1,0 +1,17 @@
+TITLE_1: PGF5005
+TITLE_2: Mecânica Clássica
+SUBTITLE_1: Disciplina de pós-graduação
+SUBTITLE_2: Material de aula, notebooks e referências.
+
+ABOUT: |
+  Este site organiza as aulas, exercícios e material suplementar da disciplina.
+
+REFERENCIAS: |
+  <ul>
+    <li>Livro AA …</li>
+    <li>Artigo BB …</li>
+  </ul>
+
+GITHUB_LINK: https://github.com/Academic-Codex/PGF5005-Mecanica-Classica
+
+HERO_FILE: mecanica-classica.png
