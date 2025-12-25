@@ -7,9 +7,64 @@ ABOUT: |
   Este site organiza as aulas, exercícios e material suplementar da disciplina.
 
 REFERENCIAS: |
+  <h3>Livros adotados</h3>
   <ul>
-    <li>Livro AA …</li>
-    <li>Artigo BB …</li>
+    <li>
+      J. Lichtenberg, M. A. Lieberman,
+      <em>Regular and Chaotic Motion</em>,
+      2ª edição, Springer-Verlag, 1992.
+    </li>
+    <li>
+      L. E. Reichl,
+      <em>The Transition to Chaos</em>,
+      Springer-Verlag, 1992.
+    </li>
+    <li>
+      Percival, D. Richards,
+      <em>Introduction to Dynamics</em>,
+      Cambridge University Press, 1989.
+    </li>
+  </ul>
+
+  <h3>Livros complementares</h3>
+  <ul>
+    <li>
+      M. A. M. Aguiar,
+      <em>Tópicos de Mecânica Clássica</em>,
+      Editora Livraria da Física, 2011.
+      <br />
+      <small>
+        Notas de aula disponíveis em:
+        <a href="https://www.if.unicamp.br/aguiar/files/2014/10/top-mec-clas.pdf" target="_blank" rel="noopener">
+          https://www.if.unicamp.br/aguiar/files/2014/10/top-mec-clas.pdf
+        </a>
+      </small>
+    </li>
+    <li>
+      G. M. Zaslavsky et al.,
+      <em>Weak Chaos and Quasi-Regular Motion</em>,
+      Cambridge University Press, 1991.
+    </li>
+    <li>
+      W. F. Wreszinski,
+      <em>Mecânica Clássica Moderna</em>,
+      EDUSP, 1996.
+    </li>
+    <li>
+      M. Ozório de Almeida,
+      <em>Hamiltonian Systems, Chaos and Quantization</em>,
+      Cambridge University Press, 1988.
+    </li>
+    <li>
+      T. Tel,
+      <em>Chaotic Dynamics: An Introduction Based on Classical Mechanics</em>,
+      Cambridge University Press, 2006.
+    </li>
+    <li>
+      J. H. Lowenstein,
+      <em>Essential of Hamiltonian Dynamics</em>,
+      Cambridge University Press, 2012.
+    </li>
   </ul>
 
 GITHUB_LINK: https://github.com/Academic-Codex/PGF5005-Mecanica-Classica
