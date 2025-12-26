@@ -1,0 +1,19 @@
+name: Update & Publish (README.md)
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - ".github/workflows/build_readme.yml"
+      - ".github/placeholders/readme.yml"
+  workflow_dispatch:
+  repository_dispatch:
+    types: [ readme-template-updated ]
+
+
+jobs:
+  call-central:
+    uses: Academic-Codex/academic-codex.github.io/.github/workflows/build-readme.yml@main
+    with:
+      placeholders_path: ".github/placeholders"
+    secrets: inherit

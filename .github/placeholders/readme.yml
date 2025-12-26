@@ -1,0 +1,12 @@
+REPO_TAGLINE: Classical mechanics • variational principles • dynamics
+ASSETS_DIR: .github/readme
+CTA_TEXT: Access the full course website
+THEME: library
+SITE_URL: https://academic-codex.github.io/PGF5005-Mecanica-Classica
+
+BG_1: "#1C1917"
+BG_2: "#292524"
+TEXT_MAIN: "#FAFAF9"
+TEXT_MUTED: "#D6D3D1"
+ACCENT: "#FB923C"
+CARD_RADIUS: "18"

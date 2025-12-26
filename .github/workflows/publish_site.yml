@@ -3,16 +3,18 @@ name: Build & Publish (gh-pages)
 on:
   push:
     branches: [ main ]
+    paths:
+      - ".github/workflows/publish_site.yml"
+      - ".github/placeholders/site.yml"
   workflow_dispatch:
   repository_dispatch:
-    types: [ template-updated ] 
+    types: [ site-template-updated ] 
 
 jobs:
   call-central:
-    uses: Academic-Codex/academic-codex.github.io/.github/workflows/build-template-site.yml@v1
+    uses: Academic-Codex/academic-codex.github.io/.github/workflows/build-site.yml@main
     with:
-      site_title: "${{ github.repository }}"
       execute: "false"
-      template_repo: "Academic-Codex/academic-codex.github.io"
-      template_path: ".github/template"
+      placeholders_path: ".github/placeholders"
+      template_repo: "Academic-Codex/academic-codex.github.io" 
     secrets: inherit
