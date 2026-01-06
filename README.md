@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://Academic-Codex.github.io/PGF5005-Mecanica-Classica">
-    <img src=".github/readme/hero.svg?v=2026-01-06T02:58:25.303900Z" width="100%" alt="Access the course website" />
+    <img src=".github/readme/hero.svg?v=2026-01-06T14:28:12.733853Z" width="100%" alt="Access the course website" />
   </a>
 </p>
 
