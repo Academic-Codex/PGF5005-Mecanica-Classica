@@ -3,32 +3,35 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Notebooks Tree — PGF5005-Mecanica-Classica</title>
+  <title>academic-codex/PGF5005-Mecanica-Classica</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="stylesheet" href="./css/paleta_cores.css" />
-  <link rel="stylesheet" href="./css/software.css" />
+  <link rel="stylesheet" href="./css/studies.css" />
   <link rel="stylesheet" href="./css/nav_bar.css" />
   <link rel="stylesheet" href="./css/pages.css" />
   <link rel="stylesheet" href="./css/home.css" />
+  <link rel="icon" type="image/png" sizes="16x16" href="./assets/img/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/img/favicon-32x32.png">
   <script src="./js/app.js" defer></script>
 </head>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-EM7FEY66C3"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
+  function gtag() { dataLayer.push(arguments); }
   gtag('js', new Date());
   gtag('config', 'G-EM7FEY66C3');
 </script>
+
 <body>
   <header class="navbar">
     <div class="wrap">
       <!-- Link extra à esquerda -->
-      <a class="repo-link" href="https://academic-codex.github.io/" title="Repositório Central">⚛</a>
-      
+      <a class="repo-link" href="https://academic-codex.github.io" title="Repositório Central">⚛</a>
+
       <div class="brand"><a href="./index.html">Homepage</a></div>
       <nav class="nav">
-        <a href="./research.html">References</a>
-        <a href="./software.html">Studies</a>
+        <a href="./references.html">References</a>
+        <a href="./studies.html">Studies</a>
       </nav>
     </div>
   </header>
@@ -39,28 +42,39 @@
     <section class="hero" role="img" aria-label="Imagem temática do repositório">
       <div class="hero__overlay"></div>
       <div class="hero__content">
-        <h1 class="hero__title"> PGF5005 • Mecânica Clássica </h1>
+        <h1 class="hero__title"> PGF5005 • Classical Mechanics </h1>
         <p class="hero__subtitle">
-         Physics . Graduate Course
+          Physics • Graduate Course
         </p>
-        <a class="btn btn--light" href="./software.html">Studies</a>
+        <a class="btn btn--light" href="./studies.html">Studies</a>
       </div>
     </section>
 
     <!-- ABOUT -->
     <section id="about" class="section">
       <h2>About</h2>
-      <div class="card grid">
-        <div>
-          
 
-          <p class="muted">Last Updated at 2026-01-07 02:58 UTC • Total number of notebooks in this course: <span id="nbcount">42</span></p>
-          <p>
-            <strong>Contact:</strong><br>
-            nara.moraes@usp.br ·
-            <a href="https://github.com/Academic-Codex/PGF5005-Mecanica-Classica#readme" >GitHub</a>
-          </p>
-        </div>
+      <div class="card">
+        <blockquote class="about-quote">
+          {{ ABOUT }}
+        </blockquote>
+
+        <p class="about-link">
+          <a href="{{ COURSE_URL }}" target="_blank" rel="noopener">
+            → Lecture Notes
+          </a>
+        </p>
+
+        <p class="muted">
+          Last Updated at 2026-02-03 01:29 UTC • Number of notebooks in this course:
+          <span id="nbcount">42</span>
+        </p>
+
+        <p class="about-contact">
+          <strong>Contact:</strong><br>
+          nara.moraes@usp.br ·
+          <a href="https://github.com/academic-codex/PGF5005-Mecanica-Classica#readme">GitHub</a>
+        </p>
       </div>
     </section>
 
@@ -70,21 +84,21 @@
       <div class="card author">
         <img id="avatar" class="avatar" alt="Foto da autora" />
         <div>
-        <p>
-        I am a graduate researcher at
-        <a href="https://portal.if.usp.br/ifusp/" target="_blank" rel="noreferrer">IFUSP</a>
-        (Institute of Physics, University of São Paulo). I have a bachelor’s degree in Computer Engineering from
-          <a href="https://eesc.usp.br/" target="_blank" rel="noreferrer">EESC</a>
-          (São Carlos School of Engineering, University of São Paulo).
-        </p>
+          <p>
+            I am a graduate researcher at
+            <a href="https://portal.if.usp.br/ifusp/" target="_blank" rel="noreferrer">IFUSP</a>
+            (Institute of Physics, University of São Paulo). I have a bachelor’s degree in Computer Engineering from
+            <a href="https://eesc.usp.br/" target="_blank" rel="noreferrer">EESC</a>
+            (São Carlos School of Engineering, University of São Paulo).
+          </p>
 
-        <p>
-          My research interests include the Standard Model, quantum computing,
-          machine learning, statistics and numerical methods. My current work can be accessed through 
-  <a href="https://naavilam.github.io" rel="noreferrer">
-    my academic page
-  </a>.
-</p>
+          <p>
+            My research interests include the Standard Model, quantum computing,
+            machine learning, statistics and numerical methods. My current work can be accessed through
+            <a href="https://naavilam.github.io" rel="noreferrer">
+              my academic page
+            </a>.
+          </p>
         </div>
       </div>
     </section>

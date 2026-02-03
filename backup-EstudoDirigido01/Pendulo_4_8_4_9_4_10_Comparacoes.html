@@ -4,7 +4,8 @@
 <head><meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Pendulo_4_8_4_9_4_10_Comparacoes</title><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script><script type="module">
-  import mermaid from 'https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.7.0/mermaid.esm.min.mjs';
+  import mermaid from 'https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.0/mermaid.esm.min.mjs';
+  
   mermaid.initialize({ startOnLoad: true });
 </script>
 <style type="text/css">
@@ -13144,7 +13145,31 @@ div#notebook {
         }
         div.prompt.input_prompt,
         div.prompt.output_prompt {
-        display: none !important;
+            display: none !important;
+        }
+
+        div.prompt {
+            display: none !important;
+        }
+
+        div.output_area {
+            width: 100% !important;
+            margin-left: 0 !important;
+        }
+
+        div.output_area .output_subarea {
+            display: flex !important;
+            justify-content: center !important;
+        }
+
+        div.output_area .output_subarea > * {
+            max-width: 100%;
+        }
+
+        div.output_area img,
+        div.output_area svg {
+            display: block;
+            margin: 0 auto;
         }
 
         /* Indent só no conteúdo renderizado do Markdown (não mexe em código/output) */
@@ -13177,6 +13202,46 @@ div#notebook {
         hyphens: auto;              /* hifeniza quando suportado */
         -webkit-hyphens: auto;
         -ms-hyphens: auto;
+        }
+        .simulation-box,
+        .deps-box {
+            max-width: 1200px;
+            margin: 24px auto;
+        }
+
+        /* Faz o output ocupar toda a largura */
+        div.output_area {
+            display: block !important;
+        }
+
+        /* Remove o limite interno */
+        div.output_html.rendered_html {
+            max-width: 100% !important;
+            width: 100% !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+
+        /* Centraliza qualquer card interno */
+        .fullwidth-center {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* remove a faixa do output HTML */
+        div.output_html.rendered_html.output_subarea {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+        }
+
+        /* Esconde qualquer saída em stderr no notebook exportado */
+        .output_subarea.output_stream.output_stderr {
+            display: none !important;
+        }
+
+        .output_subarea.output_stream.output_stderr.output_text {
+            display: none !important;
         }
         </style>
 </head>
