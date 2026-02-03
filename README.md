@@ -3,8 +3,8 @@
 </p> -->
 
 <p align="center">
-  <a href="https://Academic-Codex.github.io/PGF5005-Mecanica-Classica">
-    <img src=".github/readme/hero.svg?v=2026-01-08T01:39:33.208360Z" width="100%" alt="Access the course website" />
+  <a href="https://academic-codex.github.io/PGF5005-Mecanica-Classica?utm_source=PGF5005-Mecanica-Classica&utm_medium=readme">
+    <img src=".github/readme/hero.svg?v=2026-02-03T01:39:19.004033Z" width="100%" alt="Access the course website" />
   </a>
 </p>
 
